@@ -6,6 +6,8 @@
  * You can import it from another modules like this:
  * var mod = require('spawn_ext'); // -> 'a thing'
  */
+
+//test
  
 Spawn.prototype.createWorkerCreep = function(body, name) {
     var err = this.canCreateCreep(body, name);
