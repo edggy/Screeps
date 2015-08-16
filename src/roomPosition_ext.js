@@ -121,7 +121,7 @@ RoomPosition.prototype.update = function() {
     if(!this.walkable()) {
         for(loc in this.getMemory()) {
             delete this.getMemory()[loc];
-            console.log('Updated ' + this + ' ' + this.getMemory());
+            //console.log('Updated ' + this + ' ' + this.getMemory());
         }
         return
     }

@@ -47,7 +47,7 @@ for(creep in Game.creeps) {
 for(structure in Game.structures) {
     var structure = Game.structures[structure];
 }
-console.log(Game.getUsedCpu());
+
 for(room in Game.rooms) {
     room = Game.rooms[room];
     room.tick();
