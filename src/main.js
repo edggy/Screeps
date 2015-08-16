@@ -8,6 +8,9 @@ if(Memory.data == undefined) Memory.data = {};
 for(spawn in Game.spawns) {
     var spawn = Game.spawns[spawn];
     
+    var body = [MOVE, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK];
+    spawn.createLongestCreep(body, 'Miner');
+    
     var res = spawn.createWorkerCreep([WORK, WORK, WORK, WORK, MOVE], 'Worker 7');
     if(res == 'Worker 7') console.log(res + " has been created");
     
