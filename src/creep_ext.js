@@ -15,7 +15,26 @@ Creep.prototype.tick = function() {
         console.log(this.name + ' died');
     }
     if(this.memory.role == undefined) this.memory.role = '';
-    if(this.memory.role.toUpperCase() == 'pickup'.toUpperCase()){
+    if(this.memory.role.toUpperCase() == 'tail'.toUpperCase()){
+    	this.memory.target = this.spawn.room.controller;
+    	target.pos.mark();
+        
+        this.moveTo(target);
+        if(this.memory.last_action === undefined) this.memory.last_action = 0;
+        if(this.upgradeController(target) == 0) {
+        	this.memory.last_action = 0;
+        }
+        else this.memory.last_action++;
+        if(this.memory.last_action > this.pos.getRangeTo(target)*3) {
+        	var dir = this.pos.getDirectionTo(target);
+        	var spot = this.pos.look(dir);
+        	var creep = this.room.lookForAt('creep', spot);
+        	if(creep.length) {
+        		this.transferEnergy(creep[0]);
+        	}
+        }
+    }
+    else if(this.memory.role.toUpperCase() == 'pickup'.toUpperCase()){
     	if(this.carry.energy >= this.carryCapacity) {
             this.memory.state = 'deliver';
             this.memory.target = null;
