@@ -15,16 +15,16 @@ Creep.prototype.tick = function() {
         console.log(this.name + ' died');
     }
     if(this.memory.role == 'pickup'){
+    	if(this.carry.energy >= this.carryCapacity) {
+            this.memory.state = 'deliver';
+            this.memory.target = null;
+            this.memory.type = null;
+        }
         var targets = [];
         if(this.memory.state === undefined) this.memory.state = 'pickup';
         if(this.memory.target === undefined) this.memory.target = null;
         if(this.memory.type === undefined) this.memory.type = null;
         if(this.memory.state == 'pickup') {
-        	if(this.carry.energy >= this.carryCapacity) {
-                this.memory.state = 'deliver';
-                this.memory.target = null;
-                return;
-            }
             if(this.memory.target == null || this.memory.target == 'gone') {
                 var targets = [];
                 var ene = this.room.find(FIND_DROPPED_ENERGY);
@@ -33,8 +33,14 @@ Creep.prototype.tick = function() {
                         targets.push(ene[i]);
                     }
                 }
-                if(targets.length && this.memory.target == null) this.memory.target = targets[Math.floor(targets.length * Math.random())].id;
-                else this.memory.target = this.pos.findClosest(targets).id;
+                if(targets.length && this.memory.target == null) {
+                	this.memory.target = targets[Math.floor(targets.length * Math.random())].id;
+                	this.memory.type = 'energy';
+                }
+                else {
+                	this.memory.target = this.pos.findClosest(targets).id;
+                	this.memory.type = 'energy';
+                }
             }
             
             var target = Game.getObjectById(this.memory.target);
@@ -48,8 +54,14 @@ Creep.prototype.tick = function() {
                 this.moveTo(target);
                 this.pickup(target);
             }
+            
         }
         else if(this.memory.state == 'deliver') {
+        	if(this.carry.energy <= 1) {
+                this.memory.state = 'pickup';
+                this.memory.target = null;
+                this.memory.type = null;
+            }
             if(this.memory.target == null) {
                 if(!Game.spawns.Spawn1.isFull()) {
                     this.memory.target = Game.spawns.Spawn1.id;
@@ -143,7 +155,7 @@ Creep.prototype.moveTo = function(target) {
     var dist = this.pos.distTo(target);
     var dir = this.pos.dirTo(target);
     this.move(dir);
-    this.say(dist/2 + ' ' + dir);
+    //this.say(dist/2 + ' ' + dir);
 }
 
 Creep.prototype.log = function(string) {
