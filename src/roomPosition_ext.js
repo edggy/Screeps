@@ -102,14 +102,14 @@ RoomPosition.prototype.dirTo = function(roomPosition) {
             var dist = cur_pos.memory[roomPosition.toString()];
             if(dist < best.dist) {
                 best.dist = dist;
-                if(j === 1 && i === 0) best.dir = TOP                 //1
-                else if(j === 1 && i === 1) best.dir = TOP_RIGHT     //2
+                if(j === -1 && i === 0) best.dir = TOP                 //1
+                else if(j === -1 && i === 1) best.dir = TOP_RIGHT     //2
                 else if(j === 0 && i === 1) best.dir = RIGHT         //3
-                else if(j === -1 && i === 1) best.dir = BOTTOM_RIGHT //4
-                else if(j === -1 && i === 0) best.dir = BOTTOM        //5
-                else if(j === -1 && i === -1) best.dir = BOTTOM_LEFT   //6
+                else if(j === 1 && i === 1) best.dir = BOTTOM_RIGHT //4
+                else if(j === 1 && i === 0) best.dir = BOTTOM        //5
+                else if(j === 1 && i === -1) best.dir = BOTTOM_LEFT   //6
                 else if(j === 0 && i === -1) best.dir = LEFT           //7
-                else if(j === 1 && i === -1) best.dir = TOP_LEFT       //8
+                else if(j === -1 && i === -1) best.dir = TOP_LEFT       //8
             }
         }
     }
