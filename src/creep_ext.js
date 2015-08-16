@@ -127,12 +127,27 @@ Creep.prototype.tick = function() {
     }
     else if(this.getActiveBodyparts(WORK) > 0) {
         if(this.memory.target === undefined) this.memory.target = '55c34a6c5be41a0a6e80c904';
+        if(this.memory.last_mine === undefined) this.memory.last_mine = 0;
         var target = Game.getObjectById(this.memory.target)
         //if(this.carry.energy < this.carryCapacity) {
             target = Game.getObjectById(this.memory.target)
             this.moveTo(target);
-            this.harvest(target);
+            if(this.harvest(target) == 0) {
+            	this.memory.state = 'Mining';
+            	this.memory.last_mine = 0;
+            }
             this.dropEnergy();
+            if(this.memory.last_mine > 100) {
+            	var sources = creep.room.find(FIND_SOURCES_ACTIVE);
+            	for(i in sources) {
+                    if(sources[i].id != this.memory.target) {
+                        targets.push(sources[i]);
+                    }
+                }
+                if(targets.length) {
+                    this.memory.target = this.pos.findClosest(targets).id;
+                }
+            }
         /*}
         else if(Game.getObjectById('55cfc833da0f8b800f00507d').energy >= Game.getObjectById('55cfc833da0f8b800f00507d').energyCapacity) {
             target = Game.getObjectById('55c34a6c5be41a0a6e80c903')
