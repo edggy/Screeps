@@ -30,12 +30,12 @@ for(spawn in Game.spawns) {
 	    	res = spawn.createWorkerCreep([CARRY, MOVE], 'Worker 1', {role: 'Pickup'});
 	    }
 	}
-    if(!(res instanceof String) && num_miner < 6) {
+    if(typeof res != 'string' && num_miner < 6) {
 	    var body = [MOVE, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK];
 	    res = spawn.createLongestCreep(body, 'Miner', {role: 'Miner'});
 	}
     
-    if(!(res instanceof String) && num_pickup < 12) {
+    if(typeof res != 'string' && num_pickup < 12) {
 	    var body = [MOVE, CARRY, WORK, MOVE, CARRY, WORK, MOVE, CARRY, CARRY, MOVE, CARRY, WORK, MOVE, CARRY, CARRY, MOVE, CARRY, WORK]
 	    res = spawn.createLongestCreep(body, 'Worker', {role: 'Pickup'});
     }
