@@ -20,6 +20,11 @@ Creep.prototype.tick = function() {
         if(this.memory.target === undefined) this.memory.target = null;
         if(this.memory.type === undefined) this.memory.type = null;
         if(this.memory.state == 'pickup') {
+        	if(this.carry.energy >= this.carryCapacity) {
+                this.memory.state = 'deliver';
+                this.memory.target = null;
+                return;
+            }
             if(this.memory.target == null || this.memory.target == 'gone') {
                 var targets = [];
                 var ene = this.room.find(FIND_DROPPED_ENERGY);
@@ -42,10 +47,6 @@ Creep.prototype.tick = function() {
                 //this.say(this.pos.distTo(target)/2);
                 this.moveTo(target);
                 this.pickup(target);
-            }
-            if(this.carry.energy >= this.carryCapacity) {
-                this.memory.state = 'deliver';
-                this.memory.target = null;
             }
         }
         else if(this.memory.state == 'deliver') {
@@ -140,8 +141,9 @@ Creep.prototype.tick = function() {
 Creep.prototype.moveTo = function(target) {
     target.pos.mark();
     var dist = this.pos.distTo(target);
-    this.move(this.pos.dirTo(target));
-    this.say(dist/2);
+    var dir = this.pos.dirTo(target);
+    this.move(dir);
+    //this.say(dist/2 + ' ' + dir);
 }
 
 Creep.prototype.log = function(string) {
