@@ -13,7 +13,7 @@ for(spawn in Game.spawns) {
     var num_miner = _(Game.creeps).filter( { memory: { role: 'Miner' } } ).size();
     if(num_miner < 6) {
 	    var body = [MOVE, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK];
-	    var res = spawn.createLongestCreep(body, 'Miner');
+	    var res = spawn.createLongestCreep(body, 'Miner', {role: 'Miner'});
 	    if(res instanceof String) {
 	    	console.log(res + " has been created");
 	    }
