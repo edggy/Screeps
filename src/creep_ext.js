@@ -143,7 +143,7 @@ Creep.prototype.moveTo = function(target) {
     var dist = this.pos.distTo(target);
     var dir = this.pos.dirTo(target);
     this.move(dir);
-    //this.say(dist/2 + ' ' + dir);
+    this.say(dist/2 + ' ' + dir);
 }
 
 Creep.prototype.log = function(string) {
