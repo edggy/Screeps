@@ -98,7 +98,7 @@ RoomPosition.prototype.dirTo = function(roomPosition) {
             var cur_pos = new RoomPosition(this.x + i, this.y + j, cur_room);
             //cur_room = Game.rooms[cur_room];
             
-            if(cur_pos === undefined || !cur_pos.walkable()) return;
+            if(cur_pos === undefined || !cur_pos.walkable()) continue;
             var dist = cur_pos.memory[roomPosition.toString()];
             var usage = cur_pos.memory.usage;
             if(dist < best.dist || (dist == best.dist && usage < best.usage) || (dist == best.dist && usage == best.usage && Math.random() < 0.5)) {
