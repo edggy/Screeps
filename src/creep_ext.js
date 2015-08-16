@@ -129,7 +129,7 @@ Creep.prototype.tick = function() {
                     	this.memory.last_action = 0;
                     }
                     else this.memory.last_action++;
-                    if(this.memory.last_action > 50) {
+                    if(this.memory.last_action > this.pos.getRangeTo(target)*3) {
                     	var dir = this.pos.getDirectionTo(target);
                     	var spot = this.pos.look(dir);
                     	var creep = this.room.lookForAt('creep', spot);
