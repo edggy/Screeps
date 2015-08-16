@@ -11,7 +11,7 @@ Spawn.prototype.createWorkerCreep = function(body, name, memory) {
 	memory = memory || {};
 	if(memory.spawn == undefined) memory.spawn = this.id;
     var err = this.canCreateCreep(body, name);
-    if(!err) return this.createCreep(body, name);
+    if(!err) return this.createCreep(body, name, memory);
     else return err;
 };
 
@@ -24,7 +24,7 @@ Spawn.prototype.createLongestCreep = function(body, name, memory) {
     	err = this.canCreateCreep(body);
     }
     if(err == 0) {
-    	err = this.createCreep(body, name + ' x' + body.length);
+    	err = this.createCreep(body, name + ' x' + body.length, memory);
     	//if(err == name + ' x' + body.length) return 0;
     }
     return err;
