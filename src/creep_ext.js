@@ -131,6 +131,9 @@ Creep.prototype.tick = function() {
                 //this.say(this.pos.distTo(target)/2);
             }
         }
+        else {
+        	this.memory.state = 'pickup';
+        }
         if(this.memory.verbose && target != null) this.say(this.pos.distTo(target)/2 + ' ' + this.pos.dirTo(target));
     }
     else if(this.getActiveBodyparts(WORK) > 0) {
