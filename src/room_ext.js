@@ -14,6 +14,8 @@ Room.prototype.tick = function() {
     if(this.memory.mapping_data === undefined) this.memory.mapping_data = {};
     if(this.memory.mapping_data.next === undefined) this.memory.mapping_data.next = new RoomPosition(0, 0, this.name);
     
+    this.logController();
+    
     this.memory.mapping_data.next = new RoomPosition(this.memory.mapping_data.next.x, this.memory.mapping_data.next.y, this.name);
     var start = Game.getUsedCpu();
     var count = 0
@@ -62,5 +64,23 @@ Room.prototype.move = function(left, up) {
     if(new_loc.y > 0) ret += 'N' + new_loc.y;
     else ret += 'S' + (-new_loc.y);
     return ret;
+}
+
+Room.prototype.logController = function() {
+	var log_length = 50;
+	var avg_length = 50;
+	if(this.memory.data == undefined) this.memory.data = {};
+	if(this.memory.data.controller == undefined) this.memory.data.controller = {};
+	if(this.memory.data.controller.progress == undefined) this.memory.data.controller.progress = [];
+	var time = Game.time % log_length
+	this.memory.data.controller.progress[time] = this.controller.progress;
+	var sum = 0;
+	var cur_time = time - avg_length + cur_time;
+	while(cur_time % log_length <= time) {
+		sum += this.memory.data.controller.progress[cur_time % log_length];
+		cur_time++;
+	}
+	this.memory.data.controller.average = sum / avg_length;
+	//console.log(this.memory.data.controller.average);
 }
 
