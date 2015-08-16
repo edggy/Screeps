@@ -16,8 +16,9 @@ Creep.prototype.tick = function() {
     }
     if(this.memory.role == undefined) this.memory.role = '';
     if(this.memory.role.toUpperCase() == 'tail'.toUpperCase()){
-    	target = Game.getObjectById(this.memory.spawn).room.controller;
-    	this.memory.target = target;
+    	if(this.memory.target == undefined) this.memory.target = Game.getObjectById(this.memory.spawn).room.controller.id;
+    	
+    	var target = Game.getObjectById(this.memory.target);
     	target.pos.mark();
         
         this.moveTo(target);
