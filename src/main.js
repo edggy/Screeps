@@ -9,16 +9,16 @@ for(spawn in Game.spawns) {
     var spawn = Game.spawns[spawn];
     
     var body = [MOVE, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK];
-    spawn.createLongestCreep(body, 'Miner');
+    var res = spawn.createLongestCreep(body, 'Miner');
     
-    var res = spawn.createWorkerCreep([WORK, WORK, WORK, WORK, MOVE], 'Worker 7');
-    if(res == 'Worker 7') console.log(res + " has been created");
+    //var res = spawn.createWorkerCreep([WORK, WORK, WORK, WORK, MOVE], 'Worker 7');
+    //if(res == 'Worker 7') console.log(res + " has been created");
     
-    res = spawn.createWorkerCreep([WORK, WORK, WORK, MOVE], 'Worker 2');
-    if(res == 'Worker 2') console.log(res + " has been created");
+    //res = spawn.createWorkerCreep([WORK, WORK, WORK, MOVE], 'Worker 2');
+    //if(res == 'Worker 2') console.log(res + " has been created");
     
-    res = spawn.createWorkerCreep([WORK, WORK, WORK, MOVE], 'Worker 6');
-    if(res == 'Worker 6') console.log(res + " has been created");
+    //res = spawn.createWorkerCreep([WORK, WORK, WORK, MOVE], 'Worker 6');
+    //if(res == 'Worker 6') console.log(res + " has been created");
     
     res = spawn.createWorkerCreep([MOVE, WORK, WORK, CARRY, CARRY, CARRY, MOVE], 'Worker 8');
     if(res == 'Worker 8') console.log(res + " has been created");
