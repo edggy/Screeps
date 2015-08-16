@@ -86,20 +86,20 @@ RoomPosition.prototype.dirTo = function(roomPosition) {
 	this.memory.usage = 0;
     roomPosition = roomPosition.pos;
     var best = {dist: Number.MAX_SAFE_INTEGER, dir: 0};
-    for(var i = this.x - 1; i <= this.x + 1; i++) {
-        for(var j = this.y - 1; j <= this.y + 1; j++) {
+    for(var i = -1; i <= 1; i++) {
+        for(var j = -1; j <= 1; j++) {
             var cur_room = this.roomName;
-            if(i < 0) cur_room = room.move(1, 0);
-            else if(i > 49) cur_room = room.move(-1, 0);
+            if(this.x + i < 0) cur_room = room.move(1, 0);
+            else if(this.x + i > 49) cur_room = room.move(-1, 0);
             
-            if(j < 0) cur_room = room.move(0, 1);
-            else if(j > 49) cur_room = room.move(0, -1);
+            if(this.y + j < 0) cur_room = room.move(0, 1);
+            else if(this.y + j > 49) cur_room = room.move(0, -1);
             
-            var cur_pos = new RoomPosition(i, j, cur_room);
+            var cur_pos = new RoomPosition(this.x + i, this.y + j, cur_room);
             //cur_room = Game.rooms[cur_room];
             
             if(cur_pos === undefined) return;
-            var dist = cur_pos.getMemory()[roomPosition.toString()];
+            var dist = cur_pos.memory[roomPosition.toString()];
             if(dist < best.dist) {
                 best.dist = dist;
                 if(j === 1 && i === 0) best.dir = TOP                 //1
