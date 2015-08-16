@@ -123,7 +123,7 @@ Creep.prototype.tick = function() {
                 //this.say(this.pos.distTo(target)/2);
             }
         }
-        if(this.memory.verbose) this.say(this.pos.distTo(target)/2);
+        if(this.memory.verbose) this.say(this.pos.distTo(target)/2 + ' ' + this.pos.dirTo(target));
     }
     else if(this.getActiveBodyparts(WORK) > 0) {
         if(this.memory.target === undefined) this.memory.target = '55c34a6c5be41a0a6e80c904';
@@ -150,13 +150,13 @@ Creep.prototype.tick = function() {
     
 }
 
-Creep.prototype.moveTo = function(target) {
+/*Creep.prototype.moveTo = function(target) {
     target.pos.mark();
     var dist = this.pos.distTo(target);
     var dir = this.pos.dirTo(target);
     this.move(dir);
     //this.say(dist/2 + ' ' + dir);
-}
+}*/
 
 Creep.prototype.log = function(string) {
     console.log(this.name + ": " + string);
