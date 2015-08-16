@@ -107,7 +107,7 @@ Creep.prototype.tick = function() {
                     this.memory.state = 'pickup';
                     this.memory.target = null;
                 }
-                this.say(this.pos.distTo(target)/2);
+                //this.say(this.pos.distTo(target)/2);
             }
             
         }
@@ -137,12 +137,12 @@ Creep.prototype.tick = function() {
     
 }
 
-/*Creep.prototype.moveTo = function(target) {
+Creep.prototype.moveTo = function(target) {
     target.pos.mark();
     var dist = this.pos.distTo(target);
     this.move(this.pos.dirTo(target));
-    this.say(dist);
-}*/
+    this.say(dist/2);
+}
 
 Creep.prototype.log = function(string) {
     console.log(this.name + ": " + string);
