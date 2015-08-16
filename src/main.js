@@ -10,6 +10,9 @@ for(spawn in Game.spawns) {
     
     var body = [MOVE, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK];
     var res = spawn.createLongestCreep(body, 'Miner');
+    if(res instanceof String) {
+    	console.log(res + " has been created");
+    }
     
     //var res = spawn.createWorkerCreep([WORK, WORK, WORK, WORK, MOVE], 'Worker 7');
     //if(res == 'Worker 7') console.log(res + " has been created");

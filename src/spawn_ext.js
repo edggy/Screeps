@@ -22,7 +22,7 @@ Spawn.prototype.createLongestCreep = function(body, name) {
     }
     if(err == 0) {
     	err = this.createCreep(body, name + ' x' + body.length);
-    	if(err == name + ' x' + body.length) return 0;
+    	//if(err == name + ' x' + body.length) return 0;
     }
     return err;
 };
