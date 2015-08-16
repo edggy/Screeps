@@ -122,8 +122,8 @@ Creep.prototype.tick = function() {
                 }
                 //this.say(this.pos.distTo(target)/2);
             }
-            
         }
+        if(this.memory.verbose) this.say(this.pos.distTo(target)/2);
     }
     else if(this.getActiveBodyparts(WORK) > 0) {
         if(this.memory.target === undefined) this.memory.target = '55c34a6c5be41a0a6e80c904';
