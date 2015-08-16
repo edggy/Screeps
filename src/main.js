@@ -7,7 +7,7 @@ if(Memory.data == undefined) Memory.data = {};
 
 var spawn_count = 0;
 for(spawn in Game.spawns) {
-	if(Game.time % 10 + Game.spawns.length != spawn_count) continue;
+	if((Game.time % 10 + Object.keys(Game.spawns).length) != spawn_count) continue;
     var spawn = Game.spawns[spawn];
     
     var num_miner = _(Game.creeps).filter( { memory: { role: 'Miner' } } ).size();
@@ -27,6 +27,7 @@ for(spawn in Game.spawns) {
 	    	console.log(res + " has been created");
 	    }
     }
+    //console.log('Miners: ' + num_miner + ' Workers: ' + num_pickup);
     //var res = spawn.createWorkerCreep([WORK, WORK, WORK, WORK, MOVE], 'Worker 7');
     //if(res == 'Worker 7') console.log(res + " has been created");
     
