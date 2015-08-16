@@ -85,7 +85,7 @@ RoomPosition.prototype.findClosest = function(list) {
 RoomPosition.prototype.dirTo = function(roomPosition) {
 	this.memory.usage = 0;
     roomPosition = roomPosition.pos;
-    var best = {dist: Number.MAX_SAFE_INTEGER, dir: 0};
+    var best = {dist: Number.MAX_SAFE_INTEGER, dir: 0, usage: Number.MAX_SAFE_INTEGER};
     for(var i = -1; i <= 1; i++) {
         for(var j = -1; j <= 1; j++) {
             var cur_room = this.roomName;
@@ -98,10 +98,12 @@ RoomPosition.prototype.dirTo = function(roomPosition) {
             var cur_pos = new RoomPosition(this.x + i, this.y + j, cur_room);
             //cur_room = Game.rooms[cur_room];
             
-            if(cur_pos === undefined) return;
+            if(cur_pos === undefined || !cur_pos.walkable()) return;
             var dist = cur_pos.memory[roomPosition.toString()];
-            if(dist < best.dist) {
+            var usage = cur_pos.memory.usage;
+            if(dist < best.dist || (dist == best.dist && usage < best.usage) || (dist == best.dist && usage == best.usage && Math.random() < 0.5)) {
                 best.dist = dist;
+                best.usage = usage;
                 if(j === -1 && i === 0) best.dir = TOP                 //1
                 else if(j === -1 && i === 1) best.dir = TOP_RIGHT     //2
                 else if(j === 0 && i === 1) best.dir = RIGHT         //3
