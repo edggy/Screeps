@@ -14,7 +14,7 @@ Creep.prototype.tick = function() {
         this.suicide();
         console.log(this.name + ' died');
     }
-    if(this.memory.role == 'pickup'){
+    if(this.memory.role.toUpperCase() == 'pickup'.toUpperCase()){
     	if(this.carry.energy >= this.carryCapacity) {
             this.memory.state = 'deliver';
             this.memory.target = null;
