@@ -7,59 +7,33 @@ if(Memory.data == undefined) Memory.data = {};
 
 var spawn_count = 0;
 for(spawn in Game.spawns) {
+	var res = false;
+	spawn_count++;
 	if((Game.time % (10 + Object.keys(Game.spawns).length)) != spawn_count) continue;
+	
     var spawn = Game.spawns[spawn];
+    
+    var num_miner = _(Game.creeps).filter( { memory: { role: 'Miner' } } ).size();
+    var num_pickup = _(Game.creeps).filter( { memory: { role: 'Pickup' } } ).size();
     
     if(Game.creeps.length < 4) {
 	    res = spawn.createWorkerCreep([WORK, MOVE], 'Worker 0', {role: 'Miner'});
-	    if(res == 'Miner 0') console.log(res + " has been created");
-	    
-	    res = spawn.createWorkerCreep([CARRY, MOVE], 'Worker 1', {role: 'Pickup'});
-	    if(res == 'Worker 0') console.log(res + " has been created");
+	    if(!(res instanceof String)) {
+	    	res = spawn.createWorkerCreep([CARRY, MOVE], 'Worker 1', {role: 'Pickup'});
+	    }
 	}
-    
-    var num_miner = _(Game.creeps).filter( { memory: { role: 'Miner' } } ).size();
-    if(num_miner < 6) {
+    if(!(res instanceof String) && num_miner < 6) {
 	    var body = [MOVE, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK];
-	    var res = spawn.createLongestCreep(body, 'Miner', {role: 'Miner'});
-	    if(res instanceof String) {
-	    	console.log(res + " has been created");
-	    }
+	    res = spawn.createLongestCreep(body, 'Miner', {role: 'Miner'});
 	}
     
-    var num_pickup = _(Game.creeps).filter( { memory: { role: 'Pickup' } } ).size();
-    if(num_pickup < 8) {
+    if(!(res instanceof String) && num_pickup < 8) {
 	    var body = [MOVE, CARRY, WORK, MOVE, CARRY, WORK, MOVE, CARRY, WORK, MOVE, CARRY, WORK, MOVE, CARRY, WORK, MOVE, CARRY, WORK]
-	    var res = spawn.createLongestCreep(body, 'Worker', {role: 'Pickup'});
-	    if(res instanceof String) {
-	    	console.log(res + " has been created");
-	    }
+	    res = spawn.createLongestCreep(body, 'Worker', {role: 'Pickup'});
     }
-    //console.log('Miners: ' + num_miner + ' Workers: ' + num_pickup);
-    //var res = spawn.createWorkerCreep([WORK, WORK, WORK, WORK, MOVE], 'Worker 7');
-    //if(res == 'Worker 7') console.log(res + " has been created");
-    
-    //res = spawn.createWorkerCreep([WORK, WORK, WORK, MOVE], 'Worker 2');
-    //if(res == 'Worker 2') console.log(res + " has been created");
-    
-    //res = spawn.createWorkerCreep([WORK, WORK, WORK, MOVE], 'Worker 6');
-    //if(res == 'Worker 6') console.log(res + " has been created");
-    
-    /*res = spawn.createWorkerCreep([MOVE, WORK, WORK, CARRY, CARRY, CARRY, MOVE], 'Worker 8');
-    if(res == 'Worker 8') console.log(res + " has been created");
-    
-    res = spawn.createWorkerCreep([MOVE, WORK, WORK, CARRY, CARRY, MOVE], 'Worker 3');
-    if(res == 'Worker 3') console.log(res + " has been created");
-    
-    res = spawn.createWorkerCreep([MOVE, WORK, CARRY, CARRY, CARRY, MOVE], 'Worker 4');
-    if(res == 'Worker 4') console.log(res + " has been created");
-    
-    res = spawn.createWorkerCreep([MOVE, WORK, CARRY, CARRY, CARRY, MOVE], 'Worker 5');
-    if(res == 'Worker 5') console.log(res + " has been created");
-    */
-    
-    
-    
+    if(res instanceof String) {
+    	console.log(res + " has been created");
+    }
     spawn.pos.mark();
 }
 
