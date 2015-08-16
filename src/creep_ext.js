@@ -38,7 +38,7 @@ Creep.prototype.tick = function() {
                 	this.memory.target = targets[Math.floor(targets.length * Math.random())].id;
                 	this.memory.type = 'energy';
                 }
-                else {
+                else if(targets.length){
                 	this.memory.target = this.pos.findClosest(targets).id;
                 	this.memory.type = 'energy';
                 }
@@ -53,7 +53,14 @@ Creep.prototype.tick = function() {
                 target.pos.mark();
                 //this.say(this.pos.distTo(target)/2);
                 this.moveTo(target);
-                this.pickup(target);
+                if(this.memory.last_mine === undefined) this.memory.last_action = 0;
+                if(this.pickup(target) == 0) {
+                	this.memory.last_action = 0;
+                }
+                else this.memory.last_action++;
+                if(this.memory.last_action > 50) {
+                	this.memory.target == null;
+                }
             }
             
         }
