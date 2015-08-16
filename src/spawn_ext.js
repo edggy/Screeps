@@ -15,13 +15,13 @@ Spawn.prototype.createWorkerCreep = function(body, name) {
 
 Spawn.prototype.createLongestCreep = function(body, name) {
 	
-	var err = spawn.canCreateCreep(body);
+	var err = this.canCreateCreep(body);
     while(err < 0 && body.length > 3) {
     	body.pop();
-    	err = spawn.canCreateCreep(body);
+    	err = this.canCreateCreep(body);
     }
     if(err == 0) {
-    	err = spawn.createCreep(body, name + ' x' + body.length);
+    	err = this.createCreep(body, name + ' x' + body.length);
     	if(err == name + ' x' + body.length) return 0;
     }
     return err;
