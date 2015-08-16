@@ -53,7 +53,7 @@ Creep.prototype.tick = function() {
                 target.pos.mark();
                 //this.say(this.pos.distTo(target)/2);
                 this.moveTo(target);
-                if(this.memory.last_mine === undefined) this.memory.last_action = 0;
+                if(this.memory.last_action === undefined) this.memory.last_action = 0;
                 if(this.pickup(target) == 0) {
                 	this.memory.last_action = 0;
                 }
@@ -123,7 +123,19 @@ Creep.prototype.tick = function() {
                         this.memory.target = null;
                     }
                 }
-                else if(this.memory.type === 'upgradeController') this.upgradeController(target);
+                else if(this.memory.type === 'upgradeController') {
+                	if(this.memory.last_action === undefined) this.memory.last_action = 0;
+                    if(this.upgradeController(target) == 0) {
+                    	this.memory.last_action = 0;
+                    }
+                    else this.memory.last_action++;
+                    if(this.memory.last_action > 50) {
+                    	var dir = this.pos.dirTo(target);
+                    	var spot = this.pos.look(dir);
+                    	var creep = this.room.lookForAt('creep', spot);
+                    	if(creep.length) this.transferEnergy(creep[0]);
+                    }
+                }
                 if(this.carry.energy <= 1) {
                     this.memory.state = 'pickup';
                     this.memory.target = null;

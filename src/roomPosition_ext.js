@@ -159,6 +159,33 @@ RoomPosition.prototype.update = function() {
     }
 }
 
+RoomPosition.prototype.look = function(dir) {
+	if(dir == TOP) {
+		return new RoomPosition(this.x, this.y - 1, this.roomName);
+	}
+	else if(dir == TOP_RIGHT) {
+		return new RoomPosition(this.x + 1, this.y - 1, this.roomName);
+	}
+	else if(dir == RIGHT) {
+		return new RoomPosition(this.x + 1, this.y, this.roomName);
+	}
+	else if(dir == BOTTOM_RIGHT) {
+		return new RoomPosition(this.x + 1, this.y + 1, this.roomName);
+	}
+	else if(dir == BOTTOM) {
+		return new RoomPosition(this.x, this.y + 1, this.roomName);
+	}
+	else if(dir == BOTTOM_LEFT) {
+		return new RoomPosition(this.x - 1, this.y + 1, this.roomName);
+	}
+	else if(dir == LEFT) {
+		return new RoomPosition(this.x - 1, this.y, this.roomName);
+	}
+	else if(dir == TOP_LEFT) {
+		return new RoomPosition(this.x - 1, this.y - 1, this.roomName);
+	}
+}
+
 RoomPosition.prototype.nextInRoom = function() {
     var next_x = this.x + 1;
     var next_y = this.y;
