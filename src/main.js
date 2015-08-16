@@ -39,7 +39,7 @@ for(spawn in Game.spawns) {
 	    var body = [MOVE, CARRY, WORK, MOVE, CARRY, WORK, MOVE, CARRY, CARRY, MOVE, CARRY, WORK, MOVE, CARRY, CARRY, MOVE, CARRY, WORK]
 	    res = spawn.createLongestCreep(body, 'Worker', {role: 'Pickup'});
     }
-    if(res instanceof String) {
+    if(typeof res == 'string') {
     	console.log(res + " has been created");
     }
     spawn.pos.mark();
