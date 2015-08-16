@@ -5,6 +5,14 @@ require('creep_ext');
 
 if(Memory.data == undefined) Memory.data = {};
 
+if(Game.time % 100 == 0) {
+	for(var i in Memory.creeps) {
+	    if(!Game.creeps[i]) {
+	        delete Memory.creeps[i];
+	    }
+	}
+}
+
 var spawn_count = 0;
 for(spawn in Game.spawns) {
 	var res = false;

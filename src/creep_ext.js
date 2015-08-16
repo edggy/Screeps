@@ -58,7 +58,7 @@ Creep.prototype.tick = function() {
                 	this.memory.last_action = 0;
                 }
                 else this.memory.last_action++;
-                if(this.memory.last_action > 50) {
+                if(this.memory.last_action > 50 +  + this.pos.distTo(target)/2) {
                 	this.memory.target == null;
                 }
             }
@@ -162,7 +162,7 @@ Creep.prototype.tick = function() {
             else this.memory.last_mine++;
             this.dropEnergy();
             
-            if(this.memory.last_mine > 100) {
+            if(this.memory.last_mine > 50 + this.pos.distTo(target)/2) {
             	var sources = this.room.find(FIND_SOURCES_ACTIVE);
             	var targets = [];
             	for(i in sources) {
