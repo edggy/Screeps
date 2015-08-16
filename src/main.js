@@ -50,11 +50,11 @@ for(spawn in Game.spawns) {
     */
     
     if(Game.creeps.length < 4) {
-	    res = spawn.createWorkerCreep([WORK, MOVE], 'Worker 0');
-	    if(res == 'Worker 0') console.log(res + " has been created");
+	    res = spawn.createWorkerCreep([WORK, MOVE], 'Worker 0', {role: 'Miner'});
+	    if(res == 'Miner 0') console.log(res + " has been created");
 	    
-	    res = spawn.createWorkerCreep([WORK, CARRY, MOVE], 'Worker 1');
-	    if(res == 'Worker 1') console.log(res + " has been created");
+	    res = spawn.createWorkerCreep([CARRY, MOVE], 'Worker 1', {role: 'Pickup'});
+	    if(res == 'Worker 0') console.log(res + " has been created");
 	}
     
     spawn.pos.mark();
