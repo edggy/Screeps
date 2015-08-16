@@ -133,7 +133,9 @@ Creep.prototype.tick = function() {
                     	var dir = this.pos.dirTo(target);
                     	var spot = this.pos.look(dir);
                     	var creep = this.room.lookForAt('creep', spot);
-                    	if(creep.length) this.transferEnergy(creep[0]);
+                    	if(creep.length) {
+                    		this.transferEnergy(creep[0]);
+                    	}
                     }
                 }
                 if(this.carry.energy <= 1) {
@@ -172,6 +174,7 @@ Creep.prototype.tick = function() {
                 }
                 if(targets.length) {
                     this.memory.target = this.pos.findClosest(targets).id;
+                    this.memory.last_mine = 0;
                 }
             }
         /*}
