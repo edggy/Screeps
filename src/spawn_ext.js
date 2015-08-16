@@ -7,14 +7,17 @@
  * var mod = require('spawn_ext'); // -> 'a thing'
  */
  
-Spawn.prototype.createWorkerCreep = function(body, name) {
+Spawn.prototype.createWorkerCreep = function(body, name, memory) {
+	memory = memory || {};
+	if(memory.spawn == undefined) memory.spawn = this.id;
     var err = this.canCreateCreep(body, name);
     if(!err) return this.createCreep(body, name);
     else return err;
 };
 
-Spawn.prototype.createLongestCreep = function(body, name) {
-	
+Spawn.prototype.createLongestCreep = function(body, name, memory) {
+	memory = memory || {};
+	if(memory.spawn == undefined) memory.spawn = this.id;
 	var err = this.canCreateCreep(body);
     while(err < 0 && body.length > 3) {
     	body.pop();
