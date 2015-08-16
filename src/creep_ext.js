@@ -130,7 +130,7 @@ Creep.prototype.tick = function() {
                     }
                     else this.memory.last_action++;
                     if(this.memory.last_action > 50) {
-                    	var dir = this.pos.dirTo(target);
+                    	var dir = this.pos.getDirectionTo(target);
                     	var spot = this.pos.look(dir);
                     	var creep = this.room.lookForAt('creep', spot);
                     	if(creep.length) {
@@ -164,7 +164,7 @@ Creep.prototype.tick = function() {
             else this.memory.last_mine++;
             this.dropEnergy();
             
-            if(this.memory.last_mine > 50 + this.pos.distTo(target)/2) {
+            if(this.memory.last_mine > 50 + this.pos.getRangeTo(target)) {
             	var sources = this.room.find(FIND_SOURCES_ACTIVE);
             	var targets = [];
             	for(i in sources) {
