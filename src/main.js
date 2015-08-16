@@ -24,6 +24,7 @@ for(spawn in Game.spawns) {
     var num_miner = _(Game.creeps).filter( { memory: { role: 'Miner' } } ).size();
     var num_pickup = _(Game.creeps).filter( { memory: { role: 'Pickup' } } ).size();
     var num_tail = _(Game.creeps).filter( { memory: { role: 'Tail' } } ).size();
+    //console.log('Miners: ' + num_miner + ' Workers: ' + num_pickup + ' Tails: ' + num_tail);
     
     if(Game.creeps.length < 4) {
 	    res = spawn.createWorkerCreep([WORK, MOVE], 'Worker 0', {role: 'Miner'});
@@ -41,7 +42,7 @@ for(spawn in Game.spawns) {
 	    res = spawn.createLongestCreep(body, 'Worker', {role: 'Pickup'});
     }
     
-    if(typeof res != 'string' && num_tail < 3) {
+    if(typeof res != 'string' && num_tail < 4) {
 	    var body = [MOVE, CARRY, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK]
 	    res = spawn.createLongestCreep(body, 'Tail', {role: 'Tail'});
     }
@@ -49,6 +50,7 @@ for(spawn in Game.spawns) {
     	console.log(res + " has been created");
     }
     spawn.pos.mark();
+    
 }
 
 for(creep in Game.creeps) {
