@@ -136,7 +136,9 @@ Creep.prototype.tick = function() {
             	this.memory.state = 'Mining';
             	this.memory.last_mine = 0;
             }
+            else this.memory.last_mine++;
             this.dropEnergy();
+            
             if(this.memory.last_mine > 100) {
             	var sources = creep.room.find(FIND_SOURCES_ACTIVE);
             	for(i in sources) {
