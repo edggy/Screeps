@@ -52,10 +52,11 @@ RoomPosition.prototype.__defineGetter__('pos', function() { return this});
 
 RoomPosition.prototype.mark = function() {
     this.getMemory()[this.toString()] = 0;
+    this.memory.usage = 0;
 }
 
 RoomPosition.prototype.distTo = function(roomPosition) {
-    
+	this.memory.usage = 0;
     roomPosition = roomPosition.pos;
     //console.log(roomPosition);
     if(this.getMemory()[roomPosition.toString()] === undefined) {
@@ -82,6 +83,7 @@ RoomPosition.prototype.findClosest = function(list) {
 }
 
 RoomPosition.prototype.dirTo = function(roomPosition) {
+	this.memory.usage = 0;
     roomPosition = roomPosition.pos;
     var best = {dist: Number.MAX_SAFE_INTEGER, dir: 0};
     for(var i = this.x - 1; i <= this.x + 1; i++) {

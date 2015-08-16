@@ -20,7 +20,10 @@ Room.prototype.tick = function() {
     var end = Game.getUsedCpu();
     while(Game.getUsedCpu() < Game.cpuLimit - (end - start)) {
         //console.log(this.memory.mapping_data.next);
-        this.memory.mapping_data.next.update();
+    	if(this.memory.mapping_data.next.memory.usage === undefined) this.memory.mapping_data.next.memory.usage = 0;
+        this.memory.mapping_data.next.memory.usage++;
+        if(this.memory.mapping_data.next.memory.usage > 200) delete this.memory.mapping_data.next.memory;
+        else this.memory.mapping_data.next.update();
         this.memory.mapping_data.next = this.memory.mapping_data.next.nextInRoom();
         count++;
     }
