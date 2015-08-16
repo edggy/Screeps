@@ -140,7 +140,7 @@ Creep.prototype.tick = function() {
             this.dropEnergy();
             
             if(this.memory.last_mine > 100) {
-            	var sources = creep.room.find(FIND_SOURCES_ACTIVE);
+            	var sources = this.room.find(FIND_SOURCES_ACTIVE);
             	for(i in sources) {
                     if(sources[i].id != this.memory.target) {
                         targets.push(sources[i]);
