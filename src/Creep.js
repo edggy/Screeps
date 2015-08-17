@@ -13,6 +13,7 @@ require('Creep_Head');
 var Util = require('Util');
 
 Creep.prototype.tick = function() {
+	this.setUp();
     if(this.ticksToLive < 5) {
         this.dropEnergy();
         this.unclaimAll();
