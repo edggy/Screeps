@@ -72,19 +72,29 @@ Room.prototype.logController = function() {
 	if(this.memory.data == undefined) this.memory.data = {};
 	if(this.memory.data.controller == undefined) this.memory.data.controller = {};
 	if(this.memory.data.controller.progress == undefined) this.memory.data.controller.progress = [];
+	if(this.memory.data.tick == undefined) this.memory.data.tick = {};
+	if(this.memory.data.tick.time == undefined) this.memory.data.tick.time = [];
+	
 	var time_index = Game.time % log_length
 	this.memory.data.controller.progress[time_index] = this.controller.progress;
+	this.memory.data.tick.time[time_index] = Date.now();
 	
 	var last_time_index = (time_index - avg_length + log_length) % log_length;
+	
 	var amount = this.memory.data.controller.progress[time_index]
 	var last_amount = this.memory.data.controller.progress[last_time_index]
-	/*var sum = 0;
-	
-	while(cur_time % log_length <= time) {
-		sum += this.memory.data.controller.progress[cur_time % log_length];
-		cur_time++;
-	}*/
+
 	this.memory.data.controller.average = (amount - last_amount) / avg_length;
-	//console.log(this.memory.data.controller.average);
+	
+	var time_now = this.memory.data.tick.time[time_index]
+	var time_then = this.memory.data.tick.time[last_time_index]
+	
+	this.memory.data.tick.average = (time_now - time_then) / avg_length;
+	//console.log('Speed: ' + this.memory.data.controller.average + ' Progress / Tick' );
+	//console.log('Speed: ' + this.memory.data.tick.average + ' Ticks / Second' );
+	//if(this.memory.data.controller.average) {
+	//	console.log('Time to Level: ' + this.memory.data.controller.time_to_level + ' Ticks' );
+	//	console.log('Time to Level: ' + this.memory.data.controller.time_to_level * this.memory.data.tick.average + ' Seconds' );
+	//}
 }
 
