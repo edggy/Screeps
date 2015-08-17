@@ -72,17 +72,19 @@ Room.prototype.logController = function() {
 	if(this.memory.data == undefined) this.memory.data = {};
 	if(this.memory.data.controller == undefined) this.memory.data.controller = {};
 	if(this.memory.data.controller.progress == undefined) this.memory.data.controller.progress = [];
-	var time = Game.time % log_length
-	this.memory.data.controller.progress[time] = this.controller.progress;
+	var time_index = Game.time % log_length
+	this.memory.data.controller.progress[time_index] = this.controller.progress;
 	
-	var cur_time = (time - avg_length + cur_time) % log_length;
+	var last_time_index = (time_index - avg_length + log_length) % log_length;
+	var amount = this.memory.data.controller.progress[time_index]
+	var last_amount = this.memory.data.controller.progress[last_time_index]
 	/*var sum = 0;
 	
 	while(cur_time % log_length <= time) {
 		sum += this.memory.data.controller.progress[cur_time % log_length];
 		cur_time++;
 	}*/
-	this.memory.data.controller.average = (time - cur_time) / avg_length;
+	this.memory.data.controller.average = (amount - last_amount) / avg_length;
 	//console.log(this.memory.data.controller.average);
 }
 
