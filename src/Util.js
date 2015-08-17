@@ -37,11 +37,11 @@ isValid = function(object) {
 module.exports.isValid = isValid;
 
 setUp = function(start, memory_path) {
-	if(start.memory_path) return
+	if(!start.memory_path) return
 	var split = memory_path.split('.');
 	var path = '';
 	for(var i = 0; i < split.length; i++) {
-		path += '"["' + split[i] + '"]"';
+		path += '[' + split[i] + ']';
 		
 		var obj = start.path;
 		if(obj === undefined) obj = {};
