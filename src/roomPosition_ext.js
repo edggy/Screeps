@@ -7,15 +7,6 @@
  * var mod = require('roomPosition_ext'); // -> 'a thing'
  */
 
-//
-RoomPosition.prototype.getMemory = function() {
-    var room = Game.rooms[this.roomName];
-    if(room == undefined) return undefined;
-    if(room.memory.map === undefined) room.memory.map = {};
-    if(room.memory.map[this.x+','+this.y] === undefined) room.memory.map[this.x+','+this.y] = {};
-    return room.memory.map[this.x+','+this.y];
-}
-
 RoomPosition.prototype.__defineGetter__('memory', function() { 
     var room = Game.rooms[this.roomName];
     if(room == undefined) return undefined;
@@ -25,8 +16,12 @@ RoomPosition.prototype.__defineGetter__('memory', function() {
 });
 //RoomPosition.prototype.memory = Memory.rooms[this.roomName].memory.map[this.x+','+this.y];
 
+RoomPosition.prototype.__defineGetter__('room', function() { 
+    return Game.rooms[this.roomName];
+});
+
 RoomPosition.prototype.toString = function() {
-   return this.roomName + ': ' + this.x + ',' + this.y;
+   return this.roomName + ': ' + _.padLeft(this.x,2,'0') + ',' + _.padLeft(this.y,2,'0');
 }
 
 RoomPosition.prototype.walkable = function() {
