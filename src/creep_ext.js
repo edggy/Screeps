@@ -201,6 +201,7 @@ Creep.prototype.tick = function() {
                 	this.memory.target = this.room.find(FIND_FLAGS, {
                 	    filter: { name: 'Wait' }
                 	})[0];
+                	this.memory.state = 'Waiting';
                 }
             }
         /*}
