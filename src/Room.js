@@ -8,7 +8,7 @@
  */
 
 
-require('roomPosition_ext');
+require('RoomPosition');
 Room.prototype.tick = function() {
     if(this.memory.map === undefined) this.memory.map = {};
     if(this.memory.mapping_data === undefined) this.memory.mapping_data = {};

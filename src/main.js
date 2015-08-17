@@ -1,7 +1,7 @@
 //main
-require('room_ext');
-require('spawn_ext');
-require('creep_ext');
+require('Room');
+require('Spawn');
+require('Creeps');
 
 if(Memory.data == undefined) Memory.data = {};
 
