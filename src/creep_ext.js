@@ -196,6 +196,11 @@ Creep.prototype.tick = function() {
                 if(targets.length) {
                     this.memory.target = this.pos.findClosest(targets).id;
                     this.memory.last_mine = 0;
+                } 
+                else {
+                	this.memory.target = this.room.find(FIND_FLAGS, {
+                	    filter: { name: 'Wait' }
+                	})[0];
                 }
             }
         /*}

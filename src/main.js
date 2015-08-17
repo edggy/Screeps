@@ -11,6 +11,11 @@ if(Game.time % 100 == 0) {
 	        delete Memory.creeps[i];
 	    }
 	}
+	for(var i in Game.creeps) {
+	    if(!Memory.creeps[i]) {
+	        Memory.creeps[i] = Game.creeps[i];
+	    }
+	}
 }
 
 var spawn_count = 0;
