@@ -43,7 +43,7 @@ setUp = function(start, memory_path) {
 	for(var i = 0; i < split.length; i++) {
 		path += '"["' + split[i] + '"]"';
 		
-		var obj = start[eval(path)];
+		var obj = start.path;
 		if(obj === undefined) obj = {};
 		if(typeof obj === 'object') continue;
 		return false;
