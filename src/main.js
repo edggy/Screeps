@@ -1,7 +1,7 @@
 //main
 require('Room');
 require('Spawn');
-require('Creeps');
+require('Creep');
 
 if(Memory.data == undefined) Memory.data = {};
 
