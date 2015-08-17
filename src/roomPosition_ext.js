@@ -53,7 +53,7 @@ RoomPosition.prototype.walkable = function() {
 RoomPosition.prototype.__defineGetter__('pos', function() { return this});
 
 RoomPosition.prototype.mark = function() {
-    this.getMemory()[this.toString()] = 0;
+    this.memory[this.toString()] = 0;
     this.memory.usage = 0;
 }
 
@@ -61,15 +61,15 @@ RoomPosition.prototype.distTo = function(roomPosition) {
 	this.memory.usage = 0;
     roomPosition = roomPosition.pos;
     //console.log(roomPosition);
-    if(this.getMemory()[roomPosition.toString()] === undefined) {
-        if(roomPosition.getMemory()[this.toString()] === undefined) {
+    if(this.memory[roomPosition.toString()] === undefined) {
+        if(roomPosition.memory[this.toString()] === undefined) {
             roomPosition.mark();
             return Number.MAX_SAFE_INTEGER;
         }
-        this.getMemory()[roomPosition.toString()] = roomPosition.getMemory()[this.toString()];
-        return roomPosition.getMemory()[this.toString()];
+        this.memory[roomPosition.toString()] = roomPosition.memory[this.toString()];
+        return roomPosition.memory[this.toString()];
     }
-    return this.getMemory()[roomPosition.toString()];
+    return this.memory[roomPosition.toString()];
 }
 
 RoomPosition.prototype.findClosest = function(list) {
@@ -123,9 +123,9 @@ RoomPosition.prototype.dirTo = function(roomPosition) {
 RoomPosition.prototype.update = function() {
     //console.log(this + ' is walkable: ' + this.walkable());
     if(!this.walkable()) {
-        for(loc in this.getMemory()) {
-            delete this.getMemory()[loc];
-            //console.log('Updated ' + this + ' ' + this.getMemory());
+        for(loc in this.memory) {
+            delete this.memory[loc];
+            //console.log('Updated ' + this + ' ' + this.memory);
         }
         return
     }
@@ -147,17 +147,17 @@ RoomPosition.prototype.update = function() {
             
             if(cur_pos === undefined) continue;
             
-            for(loc in cur_pos.getMemory()) {
-                if(best[loc] === undefined || cur_pos.getMemory()[loc] < best[loc]) {
-                    best[loc] = cur_pos.getMemory()[loc];
+            for(loc in cur_pos.memory) {
+                if(best[loc] === undefined || cur_pos.memory[loc] < best[loc]) {
+                    best[loc] = cur_pos.memory[loc];
                 }
             }
         }
     }
     for(loc in best) {
         var cost = 2;
-        this.getMemory()[loc] = best[loc] + cost;
-        //console.log('Updated ' + this + ' ' + loc + ' ' + this.getMemory()[loc]);
+        this.memory[loc] = best[loc] + cost;
+        //console.log('Updated ' + this + ' ' + loc + ' ' + this.memory[loc]);
     }
 }
 
