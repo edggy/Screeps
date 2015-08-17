@@ -179,19 +179,19 @@ RoomPosition.prototype.look = function(dir) {
 	var new_room = this.roomName;
 	if(y < 0) {
 		y += 50;
-		new_room = Game.rooms[this.roomName]move(TOP).name;
+		new_room = Game.rooms[this.roomName].move(TOP).name;
 	}
 	else if(y >= 50) {
 		y -= 50;
-		new_room = Game.rooms[this.roomName]move(BOTTOM).name;
+		new_room = Game.rooms[this.roomName].move(BOTTOM).name;
 	}
 	if(x < 0) {
 		x += 50;
-		new_room = Game.rooms[this.roomName]move(LEFT).name;
+		new_room = Game.rooms[this.roomName].move(LEFT).name;
 	}
 	else if(x >= 50) {
 		x -= 50;
-		new_room = Game.rooms[this.roomName]move(RIGHT).name;
+		new_room = Game.rooms[this.roomName].move(RIGHT).name;
 	}
 	return new RoomPosition(x, y, new_room);
 	/*if(dir == TOP) {
