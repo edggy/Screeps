@@ -8,6 +8,10 @@
  */
  
 
+require('Creep_Tail');
+require('Creep_Head');
+var Util = require('Util');
+
 Creep.prototype.tick = function() {
     if(this.ticksToLive < 5) {
         this.dropEnergy();
@@ -16,7 +20,8 @@ Creep.prototype.tick = function() {
         console.log(this.name + ' died');
     }
     if(this.memory.role == undefined) this.memory.role = '';
-    if(this.memory.role.toUpperCase() == 'tail'.toUpperCase()){
+    if(this.Tail()) {
+    /*if(this.memory.role.toUpperCase() == 'tail'.toUpperCase()){
     	this.memory.target = Game.getObjectById(this.memory.spawn).room.controller.id;
     	
     	var targets = Game.spawns.Spawn1.room.find(FIND_CONSTRUCTION_SITES);
@@ -42,12 +47,12 @@ Creep.prototype.tick = function() {
         }
         else this.memory.last_action++;
         //if(this.memory.last_action > this.pos.getRangeTo(target)*3) {
-    	/*var dir = this.pos.getDirectionTo(target);
-    	var spot = this.pos.look(dir);
-    	var creep = this.room.lookForAt('creep', spot);
-    	if(creep.length) {
-    		this.transferEnergy(creep[0]);
-    	}*/
+    	//var dir = this.pos.getDirectionTo(target);
+    	//var spot = this.pos.look(dir);
+    	//var creep = this.room.lookForAt('creep', spot);
+    	//if(creep.length) {
+    	//	this.transferEnergy(creep[0]);
+    	//}
     	var dir = this.pos.getDirectionTo(target);
     	//var spot = this.pos.look(dir);
     	var creep = [];
@@ -58,7 +63,9 @@ Creep.prototype.tick = function() {
     	if(creep.length) {
     		this.transferEnergy(creep[0]);
     	}
-        //}
+        //}*/
+    }
+    else if(this.Head()) {
     }
     else if(this.memory.role.toUpperCase() == 'pickup'.toUpperCase()){
     	if(this.carry.energy >= this.carryCapacity) {
@@ -359,6 +366,21 @@ Creep.prototype.tick = function() {
     //this.say(dist/2 + ' ' + dir);
 }*/
 
+Creep.prototype.setTarget = function(targets, limit) {
+	limit = limit || 1;
+	targets = Util.toIds(targets);
+	for(i in targets) {
+		cur_target = targets[i];
+		if(this.canClaim(cur_target, limit)) {
+			this.claim(cur_target);
+			this.unClaim(this.memory.target);
+			this.memory.target = cur_target;
+			return true;
+		}
+	}
+	return false;
+}
+
 Creep.prototype.log = function(string) {
     console.log(this.name + ": " + string);
 }
@@ -403,4 +425,65 @@ Creep.prototype.canClaim = function(target, num) {
 
 Creep.prototype.claimed = function(target) {
     return target.id in this.memory.claims;
+}
+
+Creep.prototype.feed = function(dir, spread) {
+	dir = dir || TOP;
+	spread = spread || 2
+	for(var i = -spread; i <= spread; i++) {
+	    var creep_at = this.room.lookForAt('creep', this.pos.look((dir+i+16)%8))[0];
+        if(creep_at != undefined) {
+        	this.transferEnergy(creep_at);
+        	break;
+        }
+	}
+}
+
+Creep.prototype.feedForward = function(dir, spread) {
+	dir = dir + this.pos.getDirectionTo(target);
+	spread = spread || 2
+	for(var i = -spread; i <= spread; i++) {
+	    var creep_at = this.room.lookForAt('creep', this.pos.look((dir+i+16)%8))[0];
+        if(creep_at != undefined) {
+        	this.transferEnergy(creep_at);
+        	break;
+        }
+	}
+}
+
+Object.defineProperty(Creep.prototype, "role", {
+    get: function() {
+    	return Memory.roles[this.memory.role];
+    },
+	set: function(value) {
+		Memory.roles[this.memory.role] = value;
+	}
+});
+
+Object.defineProperty(Creep.prototype, "spawn", {
+    get: function() {
+    	Util.setUp(this, 'ids');
+    	return Game.getObjectById(this.memory.ids.spawn);
+    },
+	set: function(value) {
+		if(Util.isValidId(value)) Memory.roles[this.memory.role] = value;
+		else if(Util.isValid(value)) Memory.roles[this.memory.role] = value.id;
+	}
+});
+
+Object.defineProperty(Creep.prototype, "target", {
+    get: function() {
+    	var res = Game.getObjectById(this.memory.ids.target);
+    	//if(res === null) return undefined;
+    	return Game.getObjectById(this.memory.ids.target);
+    },
+	set: function(value) {
+		if(Util.isValidId(target)) Memory.roles[this.memory.role] = target;
+		else if(Util.isValid(target)) Memory.roles[this.memory.role] = target.id;
+	}
+});
+
+Creep.prototype.setUp = function() {
+	Util.setUp(this.memory, 'ids');
+	Util.setUp(this.memory, 'claims');
 }

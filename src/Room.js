@@ -9,6 +9,8 @@
 
 
 require('RoomPosition');
+var Util = require('Util');
+
 Room.prototype.tick = function() {
     if(this.memory.map === undefined) this.memory.map = {};
     if(this.memory.mapping_data === undefined) this.memory.mapping_data = {};
@@ -35,6 +37,8 @@ Room.prototype.tick = function() {
 }
 
 Room.prototype.loc = function() {
+	//Define N0W0 to be 0,0
+	//so S0E0 would  be -1,-1
     var N_loc = this.name.indexOf('N');
     var S_loc = this.name.indexOf('S');
     var W_loc = this.name.indexOf('W');
@@ -45,26 +49,36 @@ Room.prototype.loc = function() {
     if(N_loc > -1) {
         res.y = parseInt(this.name.substr(N_loc + 1));
         if(W_loc > -1) res.x = parseInt(this.name.substr(W_loc + 1, N_loc - 1));
-        else res.x = -parseInt(this.name.substr(E_loc + 1, N_loc - 1));
+        else res.x = -(parseInt(this.name.substr(E_loc + 1, N_loc - 1))-1);
     }
     else {
-        res.y = -parseInt(this.name.substr(S_loc + 1));
+        res.y = -(parseInt(this.name.substr(S_loc + 1))-1);
         if(W_loc > -1) res.x = parseInt(this.name.substr(W_loc + 1, S_loc - 1));
-        else res.x = -parseInt(this.name.substr(E_loc + 1, S_loc - 1));
+        else res.x = -(parseInt(this.name.substr(E_loc + 1, S_loc - 1))-1);
     }
     return res;
 };
 
-Room.prototype.move = function(left, up) {
+Room.prototype.move = function(i, j) {
+	//Define N0W0 to be 0,0
+	//so S0E0 would  be -1,-1
     var new_loc = this.loc();
-    new_loc.x += left;
-    new_loc.y += up;
+    
+    if(j) {
+    	new_loc.x += i;
+    	new_loc.y += j;
+    }
+    else {
+    	var offset = Util.getDirection(i);
+    	new_loc.x += offset.x;
+    	new_loc.y += offset.y;
+    }
     var ret = '';
-    if(new_loc.x > 0) ret += 'W' + new_loc.x;
-    else ret += 'E' + (-new_loc.x);
-    if(new_loc.y > 0) ret += 'N' + new_loc.y;
-    else ret += 'S' + (-new_loc.y);
-    return ret;
+    if(new_loc.x >= 0) ret += 'W' + new_loc.x;
+    else ret += 'E' + (-(new_loc.x+1));
+    if(new_loc.y >= 0) ret += 'N' + new_loc.y;
+    else ret += 'S' + (-(new_loc.y+1));
+    return Game.rooms.ret;
 }
 
 Room.prototype.logController = function() {

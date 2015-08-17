@@ -7,21 +7,48 @@
  * var mod = require('roomPosition_ext'); // -> 'a thing'
  */
 
-RoomPosition.prototype.__defineGetter__('memory', function() { 
-    var room = Game.rooms[this.roomName];
-    if(room == undefined) return undefined;
-    if(room.memory.map === undefined) room.memory.map = {};
-    if(room.memory.map[this.x+','+this.y] === undefined) room.memory.map[this.x+','+this.y] = {};
-    return room.memory.map[this.x+','+this.y];
-});
-//RoomPosition.prototype.memory = Memory.rooms[this.roomName].memory.map[this.x+','+this.y];
+var Util = require('Util');
 
-RoomPosition.prototype.__defineGetter__('room', function() { 
-    return Game.rooms[this.roomName];
+Object.defineProperty(RoomPosition.prototype, "room", {
+	enumerable: true,
+    get: function() {
+    	return Game.rooms[this.roomName];
+    }
+});
+
+Object.defineProperty(RoomPosition.prototype, "memory", {
+	enumerable: true,
+    get: function() {
+    	var name = this.x+','+this.y
+    	Util.setUp(room, 'map.' + name);
+    	return room.map[name];
+    }
+});
+
+Object.defineProperty(RoomPosition.prototype, "pos", {
+	enumerable: true,
+    get: function() {
+    	return this;
+    }
 });
 
 RoomPosition.prototype.toString = function() {
    return this.roomName + ': ' + _.padLeft(this.x,2,'0') + ',' + _.padLeft(this.y,2,'0');
+}
+
+RoomPosition.prototype.getFreeSpace = function() {
+	Util.setUp(Memory, 'global.RoomPosition.RecheckTime');
+	if(this.memory.freeSpace || this.memory.freeSpace.lastCheck > Memory.global.RoomPosition.RecheckTime) {
+		this.memory.freeSpace = {space: 0};
+		for(var i = -1; i <= 1; i++) {
+			for(var j = -1; j <= 1; j++) {
+				var adj = new RoomPosition(this.x + i, this.y + j, this.roomName);
+				if(adj.walkable()) this.memory.freeSpace.space++;
+			}
+		}
+		this.memory.freeSpace.lastCheck = Game.time;
+	}
+	return this.memory.freeSpace;
 }
 
 RoomPosition.prototype.walkable = function() {
@@ -45,26 +72,51 @@ RoomPosition.prototype.walkable = function() {
     return 1;
 }
 
-RoomPosition.prototype.__defineGetter__('pos', function() { return this});
-
-RoomPosition.prototype.mark = function() {
-    this.memory[this.toString()] = 0;
+RoomPosition.prototype.mark = function(value) {
+    this.memory[this.toString()] = value;
     this.memory.usage = 0;
 }
 
 RoomPosition.prototype.distTo = function(roomPosition) {
-	this.memory.usage = 0;
+	roomPosition.memory.usage = 0;
     roomPosition = roomPosition.pos;
-    //console.log(roomPosition);
     if(this.memory[roomPosition.toString()] === undefined) {
         if(roomPosition.memory[this.toString()] === undefined) {
             roomPosition.mark();
             return Number.MAX_SAFE_INTEGER;
         }
-        this.memory[roomPosition.toString()] = roomPosition.memory[this.toString()];
+        //this.memory[roomPosition.toString()] = roomPosition.memory[this.toString()];
         return roomPosition.memory[this.toString()];
     }
     return this.memory[roomPosition.toString()];
+}
+
+RoomPosition.prototype.dirTo = function(roomPosition) {
+	roomPosition.memory.usage = 0;
+    roomPosition = roomPosition.pos;
+    var best = {dist: Number.MAX_SAFE_INTEGER, dir: 0, usage: Number.MAX_SAFE_INTEGER};
+    for(var i = -1; i <= 1; i++) {
+        for(var j = -1; j <= 1; j++) {
+            var cur_room = this.roomName;
+            if(this.x + i < 0) cur_room = room.move(1, 0);
+            else if(this.x + i > 49) cur_room = room.move(-1, 0);
+            
+            if(this.y + j < 0) cur_room = room.move(0, 1);
+            else if(this.y + j > 49) cur_room = room.move(0, -1);
+            
+            var cur_pos = new RoomPosition(this.x + i, this.y + j, cur_room);
+
+            if(cur_pos === undefined || !cur_pos.walkable()) continue;
+            var dist = cur_pos.memory[roomPosition.toString()];
+            var usage = cur_pos.memory.usage;
+            if(dist < best.dist || (dist == best.dist && usage < best.usage) || (dist == best.dist && usage == best.usage && Math.random() < 0.5)) {
+                best.dist = dist;
+                best.usage = usage;
+                best.dir = Util.getDirection(i, j);
+            }
+        }
+    }
+    return best.dir;
 }
 
 RoomPosition.prototype.findClosest = function(list) {
@@ -79,51 +131,15 @@ RoomPosition.prototype.findClosest = function(list) {
     return closest.obj;
 }
 
-RoomPosition.prototype.dirTo = function(roomPosition) {
-	this.memory.usage = 0;
-    roomPosition = roomPosition.pos;
-    var best = {dist: Number.MAX_SAFE_INTEGER, dir: 0, usage: Number.MAX_SAFE_INTEGER};
-    for(var i = -1; i <= 1; i++) {
-        for(var j = -1; j <= 1; j++) {
-            var cur_room = this.roomName;
-            if(this.x + i < 0) cur_room = room.move(1, 0);
-            else if(this.x + i > 49) cur_room = room.move(-1, 0);
-            
-            if(this.y + j < 0) cur_room = room.move(0, 1);
-            else if(this.y + j > 49) cur_room = room.move(0, -1);
-            
-            var cur_pos = new RoomPosition(this.x + i, this.y + j, cur_room);
-            //cur_room = Game.rooms[cur_room];
-            
-            if(cur_pos === undefined || !cur_pos.walkable()) continue;
-            var dist = cur_pos.memory[roomPosition.toString()];
-            var usage = cur_pos.memory.usage;
-            if(dist < best.dist || (dist == best.dist && usage < best.usage) || (dist == best.dist && usage == best.usage && Math.random() < 0.5)) {
-                best.dist = dist;
-                best.usage = usage;
-                if(j === -1 && i === 0) best.dir = TOP                 //1
-                else if(j === -1 && i === 1) best.dir = TOP_RIGHT     //2
-                else if(j === 0 && i === 1) best.dir = RIGHT         //3
-                else if(j === 1 && i === 1) best.dir = BOTTOM_RIGHT //4
-                else if(j === 1 && i === 0) best.dir = BOTTOM        //5
-                else if(j === 1 && i === -1) best.dir = BOTTOM_LEFT   //6
-                else if(j === 0 && i === -1) best.dir = LEFT           //7
-                else if(j === -1 && i === -1) best.dir = TOP_LEFT       //8
-            }
-        }
-    }
-    return best.dir;
-}
-
 RoomPosition.prototype.update = function() {
     //console.log(this + ' is walkable: ' + this.walkable());
-    if(!this.walkable()) {
+    /*if(!this.walkable()) {
         for(loc in this.memory) {
             delete this.memory[loc];
             //console.log('Updated ' + this + ' ' + this.memory);
         }
         return
-    }
+    }*/
     var room = Game.rooms[this.roomName];
     if(room == undefined) return false;
     
@@ -131,11 +147,11 @@ RoomPosition.prototype.update = function() {
     for(var i = this.x - 1; i <= this.x + 1; i++) {
         for(var j = this.y - 1; j <= this.y + 1; j++) {
             var cur_room = this.roomName;
-            if(i < 0) cur_room = room.move(1, 0);
-            else if(i > 49) cur_room = room.move(-1, 0);
+            if(i < 0) cur_room = this.room.move(1, 0);
+            else if(i > 49) cur_room = this.room.move(-1, 0);
             
-            if(j < 0) cur_room = room.move(0, 1);
-            else if(j > 49) cur_room = room.move(0, -1);
+            if(j < 0) cur_room = this.room.move(0, 1);
+            else if(j > 49) cur_room = this.room.move(0, -1);
             
             var cur_pos = new RoomPosition(i, j, cur_room);
             //cur_room = Game.rooms[cur_room];
@@ -157,7 +173,29 @@ RoomPosition.prototype.update = function() {
 }
 
 RoomPosition.prototype.look = function(dir) {
-	if(dir == TOP) {
+	var offset = getDirection(dir);
+	var x = this.x + offset.x;
+	var y = this.y + offset.y;
+	var new_room = this.roomName;
+	if(y < 0) {
+		y += 50;
+		new_room = Game.rooms[this.roomName]move(TOP).name;
+	}
+	else if(y >= 50) {
+		y -= 50;
+		new_room = Game.rooms[this.roomName]move(BOTTOM).name;
+	}
+	if(x < 0) {
+		x += 50;
+		new_room = Game.rooms[this.roomName]move(LEFT).name;
+	}
+	else if(x >= 50) {
+		x -= 50;
+		new_room = Game.rooms[this.roomName]move(RIGHT).name;
+	}
+	return new RoomPosition(x, y, new_room);
+	/*if(dir == TOP) {
+		if(this.y - 1 >= 0) return new RoomPosition(this.x, this.y - 1, this.roomName);
 		return new RoomPosition(this.x, this.y - 1, this.roomName);
 	}
 	else if(dir == TOP_RIGHT) {
@@ -180,7 +218,7 @@ RoomPosition.prototype.look = function(dir) {
 	}
 	else if(dir == TOP_LEFT) {
 		return new RoomPosition(this.x - 1, this.y - 1, this.roomName);
-	}
+	}*/
 }
 
 RoomPosition.prototype.nextInRoom = function() {

@@ -4,7 +4,7 @@
 
 var Util = require('Util');
 
-Creep.prototype.Head = function() {
+Creep.prototype.Tail = function() {
 	if(this.memory.role.toUpperCase() != 'tail'.toUpperCase()) return false;
 	if(this.target === null) {
 		Util.setUp(this, 'role.valid_targets');
@@ -21,6 +21,7 @@ Creep.prototype.Head = function() {
 	if(this.target === null) return;
 	this.moveTo(target);
 	this[this.role.valid_targets.action](target);
-	this.feedForward(4, 4);
+	this.feedForward();
 	return true;
 }
+
