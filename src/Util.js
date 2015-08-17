@@ -37,8 +37,7 @@ isValid = function(object) {
 module.exports.isValid = isValid;
 
 setUp = function(start, memory_path) {
-	var end = eval(memory_path)
-	if(end || start.end) return
+	if(start.memory_path) return
 	var split = memory_path.split('.');
 	var path = '';
 	for(var i = 0; i < split.length; i++) {
