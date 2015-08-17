@@ -68,19 +68,21 @@ Room.prototype.move = function(left, up) {
 
 Room.prototype.logController = function() {
 	var log_length = 50;
-	var avg_length = 50;
+	var avg_length = 40;
 	if(this.memory.data == undefined) this.memory.data = {};
 	if(this.memory.data.controller == undefined) this.memory.data.controller = {};
 	if(this.memory.data.controller.progress == undefined) this.memory.data.controller.progress = [];
 	var time = Game.time % log_length
 	this.memory.data.controller.progress[time] = this.controller.progress;
-	var sum = 0;
-	var cur_time = time - avg_length + cur_time;
+	
+	var cur_time = (time - avg_length + cur_time) % log_length;
+	/*var sum = 0;
+	
 	while(cur_time % log_length <= time) {
 		sum += this.memory.data.controller.progress[cur_time % log_length];
 		cur_time++;
-	}
-	this.memory.data.controller.average = sum / avg_length;
+	}*/
+	this.memory.data.controller.average = (time - cur_time) / avg_length;
 	//console.log(this.memory.data.controller.average);
 }
 
