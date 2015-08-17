@@ -72,6 +72,7 @@ Room.prototype.logController = function() {
 	if(this.memory.data == undefined) this.memory.data = {};
 	if(this.memory.data.controller == undefined) this.memory.data.controller = {};
 	if(this.memory.data.controller.progress == undefined) this.memory.data.controller.progress = [];
+	if(this.memory.data.controller.best == undefined) this.memory.data.controller.best = {};
 	if(this.memory.data.tick == undefined) this.memory.data.tick = {};
 	if(this.memory.data.tick.time == undefined) this.memory.data.tick.time = [];
 	
@@ -85,16 +86,24 @@ Room.prototype.logController = function() {
 	var last_amount = this.memory.data.controller.progress[last_time_index]
 
 	this.memory.data.controller.average = (amount - last_amount) / avg_length;
+	if(this.memory.data.controller.average > this.memory.data.controller.best) this.memory.data.controller.best = this.memory.data.controller.average;
 	
 	var time_now = this.memory.data.tick.time[time_index]
 	var time_then = this.memory.data.tick.time[last_time_index]
 	
 	this.memory.data.tick.average = (time_now - time_then) / avg_length;
-	//console.log('Speed: ' + this.memory.data.controller.average + ' Progress / Tick' );
-	//console.log('Speed: ' + this.memory.data.tick.average + ' Ticks / Second' );
-	//if(this.memory.data.controller.average) {
-	//	console.log('Time to Level: ' + this.memory.data.controller.time_to_level + ' Ticks' );
-	//	console.log('Time to Level: ' + this.memory.data.controller.time_to_level * this.memory.data.tick.average + ' Seconds' );
-	//}
+	/*console.log('Speed: ' + this.memory.data.controller.average + ' Progress / Tick' );
+	console.log('Speed: ' + this.memory.data.tick.average + ' Ticks / Second' );
+	if(this.memory.data.controller.average) {
+		console.log('Time to Level: ' + this.memory.data.controller.time_to_level + ' Ticks' );
+		var time = Math.floor(this.memory.data.controller.time_to_level * this.memory.data.tick.average)
+		var seconds = Math.floor(time / 1000);
+		var minutes = Math.floor(seconds / 60);
+		var hours = Math.floor(minutes / 60);
+		var days = Math.floor(hours / 24);
+		var time_string = (hours % 24) + ':' + (minutes % 60) + ':' + (seconds % 60) + '.' + (time % 1000);
+		if(days) time_string = + days + ':' + time_string;
+		console.log('Time to Level: ' + time_string + ' Seconds' );
+	}*/
 }
 
