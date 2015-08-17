@@ -19,6 +19,7 @@ RoomPosition.prototype.getMemory = function() {
 RoomPosition.prototype.__defineGetter__('memory', function() { 
     var room = Game.rooms[this.roomName];
     if(room == undefined) return undefined;
+    if(room.memory.map === undefined) room.memory.map = {};
     if(room.memory.map[this.x+','+this.y] === undefined) room.memory.map[this.x+','+this.y] = {};
     return room.memory.map[this.x+','+this.y];
 });

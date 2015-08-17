@@ -20,7 +20,8 @@ Room.prototype.tick = function() {
     var start = Game.getUsedCpu();
     var count = 0
     var end = Game.getUsedCpu();
-    while(Game.getUsedCpu() < Game.cpuLimit - (end - start)) {
+    //while(Game.getUsedCpu() < Game.cpuLimit - (end - start)) {
+    /*for(var i = 0; i < 50; i++){
         //console.log(this.memory.mapping_data.next);
     	if(this.memory.mapping_data.next.memory.usage === undefined) this.memory.mapping_data.next.memory.usage = 0;
         this.memory.mapping_data.next.memory.usage++;
@@ -28,7 +29,7 @@ Room.prototype.tick = function() {
         else this.memory.mapping_data.next.update();
         this.memory.mapping_data.next = this.memory.mapping_data.next.nextInRoom();
         count++;
-    }
+    }*/
     end = Game.getUsedCpu();
     //console.log('CPU: ' + (end - start) + '\nTiles: ' + count + "\n% of room: " + (count/(50*50)*100) + "\n% of room per CPU: " + (count/(50*50)*100)/(end - start));
 }
@@ -67,8 +68,8 @@ Room.prototype.move = function(left, up) {
 }
 
 Room.prototype.logController = function() {
-	var log_length = 50;
-	var avg_length = 40;
+	var log_length = 200;
+	var avg_length = 190;
 	if(this.memory.data == undefined) this.memory.data = {};
 	if(this.memory.data.controller == undefined) this.memory.data.controller = {};
 	if(this.memory.data.controller.progress == undefined) this.memory.data.controller.progress = [];
@@ -92,18 +93,23 @@ Room.prototype.logController = function() {
 	var time_then = this.memory.data.tick.time[last_time_index]
 	
 	this.memory.data.tick.average = (time_now - time_then) / avg_length;
-	/*console.log('Speed: ' + this.memory.data.controller.average + ' Progress / Tick' );
-	console.log('Speed: ' + this.memory.data.tick.average + ' Ticks / Second' );
+	///*
+	if(Game.time % 10 == 5) console.log('Speed: ' + this.memory.data.controller.average + ' Progress / Tick' );
+	//if(Game.time % 10 == 5) console.log('Speed: ' + this.memory.data.controller.average * this.memory.data.tick.average / 1000 + ' Ticks / Second' );
 	if(this.memory.data.controller.average) {
-		console.log('Time to Level: ' + this.memory.data.controller.time_to_level + ' Ticks' );
-		var time = Math.floor(this.memory.data.controller.time_to_level * this.memory.data.tick.average)
+	    this.memory.data.controller.time_to_level = this.controller.progressTotal / (this.memory.data.controller.average);
+		if(Game.time % 10 == 0) console.log('Time to Level: ' + this.memory.data.controller.time_to_level + ' Ticks' );
+		/*var time = Math.floor(this.memory.data.controller.time_to_level * this.memory.data.tick.average)
 		var seconds = Math.floor(time / 1000);
 		var minutes = Math.floor(seconds / 60);
 		var hours = Math.floor(minutes / 60);
 		var days = Math.floor(hours / 24);
 		var time_string = (hours % 24) + ':' + (minutes % 60) + ':' + (seconds % 60) + '.' + (time % 1000);
 		if(days) time_string = + days + ':' + time_string;
-		console.log('Time to Level: ' + time_string + ' Seconds' );
-	}*/
+		if(Game.time % 10 == 0) console.log('Time to Level: ' + time_string + ' Seconds' );
+		*/
+	}
+	//console.log(this.controller.progress);
+	//*/
 }
 

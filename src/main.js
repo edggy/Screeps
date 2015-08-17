@@ -22,8 +22,8 @@ var spawn_count = 0;
 for(spawn in Game.spawns) {
 	var res = false;
 	spawn_count++;
-	if((Game.time % (50 + Object.keys(Game.spawns).length)) != spawn_count) continue;
-	
+	//console.log(Game.time % (3 * Object.keys(Game.creeps).length + Object.keys(Game.spawns).length + 1));
+	if((Game.time % (3 * Object.keys(Game.creeps).length + Object.keys(Game.spawns).length + 1)) != spawn_count) continue;
     var spawn = Game.spawns[spawn];
     
     var num_miner = _(Game.creeps).filter( { memory: { role: 'Miner' } } ).size();
@@ -31,21 +31,27 @@ for(spawn in Game.spawns) {
     var num_tail = _(Game.creeps).filter( { memory: { role: 'Tail' } } ).size();
     //console.log('Miners: ' + num_miner + ' Workers: ' + num_pickup + ' Tails: ' + num_tail);
     
-    if(Game.creeps.length < 4) {
+    if(Object.keys(Game.creeps).length < 4) {
 	    res = spawn.createWorkerCreep([WORK, MOVE], 'Worker 0', {role: 'Miner'});
-	    if(!(res instanceof String)) {
+	    if(typeof res != 'string') {
 	    	res = spawn.createWorkerCreep([CARRY, MOVE], 'Worker 1', {role: 'Pickup'});
 	    }
 	}
+	
+
     if(spawn.memory.max == undefined) spawn.memory.max == {};
-    if(spawn.memory.max.miner == undefined) spawn.memory.max.miner == 6;
-    if(spawn.memory.max.worker == undefined) spawn.memory.max.worker == 6;
-    if(spawn.memory.max.tail == undefined) spawn.memory.max.tail == 4;
+    if(spawn.memory.max['miner'] == undefined) spawn.memory.max['miner'] == 6;
+    if(spawn.memory.max['worker'] == undefined) spawn.memory.max['worker'] == 6;
+    if(spawn.memory.max['tail'] == undefined) spawn.memory.max['tail'] == 4;
     
-    if(typeof res != 'string' && num_pickup < spawn.memory.max.worker && num_miner > num_pickup) {
-	    var body = [MOVE, CARRY, WORK, MOVE, CARRY, WORK, MOVE, CARRY, CARRY, MOVE, CARRY, WORK, MOVE, CARRY, CARRY, MOVE, CARRY, WORK]
+    
+    if(typeof res != 'string' && num_pickup < spawn.memory.max.worker && (num_miner > num_pickup || num_miner == spawn.memory.max.miner)) {
+	    //var body = [MOVE, CARRY, WORK, MOVE, CARRY, WORK, MOVE, CARRY, CARRY, MOVE, CARRY, WORK, MOVE, CARRY, CARRY, MOVE, CARRY, WORK];
+	    var body = [MOVE, CARRY, CARRY, MOVE, CARRY, CARRY, MOVE, CARRY, CARRY, MOVE, CARRY, CARRY, MOVE, CARRY, CARRY, MOVE, CARRY, CARRY, MOVE, CARRY, CARRY, MOVE, CARRY, CARRY, MOVE];
 	    res = spawn.createLongestCreep(body, 'Worker', {role: 'Pickup'});
     }
+    
+    //console.log(typeof res != 'string' && num_miner < spawn.memory.max.miner);
     
     if(typeof res != 'string' && num_miner < spawn.memory.max.miner) {
 	    var body = [MOVE, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK];
@@ -59,6 +65,7 @@ for(spawn in Game.spawns) {
     if(typeof res == 'string') {
     	console.log(res + " has been created");
     }
+    
     spawn.pos.mark();
     
 }
