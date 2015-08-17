@@ -11,6 +11,13 @@
 require('RoomPosition');
 var Util = require('Util');
 
+Object.defineProperty(Room.prototype, "map", {
+	enumerable: true,
+    get: function() {
+    	return Memory.rooms[this.name];
+    }
+});
+
 Room.prototype.tick = function() {
     if(this.memory.map === undefined) this.memory.map = {};
     if(this.memory.mapping_data === undefined) this.memory.mapping_data = {};

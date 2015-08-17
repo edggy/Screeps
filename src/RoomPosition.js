@@ -20,8 +20,8 @@ Object.defineProperty(RoomPosition.prototype, "memory", {
 	enumerable: true,
     get: function() {
     	var name = this.x+','+this.y
-    	Util.setUp(Memory.rooms, 'map.' + name);
-    	return Memory.rooms.map[name];
+    	Util.setUp(this.room, 'map.' + name);
+    	return this.room.map[name];
     }
 });
 
