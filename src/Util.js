@@ -2,7 +2,7 @@
  * 
  */
 
-toIds = function(list) {
+toIds = function(targets) {
 	if(!Array.isArray(targets)) {
 		var keys = Object.keys(targets);
 		if(isValid(keys[0]) || isValidId(keys[0])) {
@@ -16,7 +16,7 @@ toIds = function(list) {
 		if(isValid(cur)) {
 			proper_targets.push(cur.id);
 		}
-		else if(isValidId(id)) {
+		else if(isValidId(cur)) {
 			proper_targets.push(cur);
 		}
 	}
