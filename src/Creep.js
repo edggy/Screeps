@@ -479,7 +479,7 @@ Object.defineProperty(Creep.prototype, "target", {
     	return Game.getObjectById(this.memory.ids.target);
     },
 	set: function(value) {
-		if(Util.isValidId(value)) this.memory.ids.target = value;
+		if(value == null || Util.isValidId(value)) this.memory.ids.target = value;
 		else if(Util.isValid(value)) this.memory.ids.target = value.id;
 	}
 });
