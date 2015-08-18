@@ -5,7 +5,8 @@ require('Creep');
 
 var Util = require('Util');
 
-Util.setUp(Memory, 'really.long.data.structure');
+Util.setUp(Memory, 'global.roles.Head.valid_targets');
+Util.setUp(Memory, 'global.roles.Tail.valid_targets');
 
 if(Memory.data == undefined) Memory.data = {};
 

@@ -85,6 +85,7 @@ RoomPosition.prototype.mark = function(value) {
 }
 
 RoomPosition.prototype.distTo = function(roomPosition) {
+	Util.setUp(roomPosition, 'memory.usage');
 	roomPosition.memory.usage = 0;
     roomPosition = roomPosition.pos;
     if(this.memory[roomPosition.toString()] === undefined) {
