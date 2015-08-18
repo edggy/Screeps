@@ -37,9 +37,9 @@ for(spawn in Game.spawns) {
     //console.log('Miners: ' + num_miner + ' Workers: ' + num_pickup + ' Tails: ' + num_tail);
     
     if(Object.keys(Game.creeps).length < 4) {
-	    res = spawn.createWorkerCreep([WORK, MOVE], 'Worker 0', {role: 'Head'});
+	    res = spawn.createWorkerCreep([WORK, MOVE], 'Worker 0', {role: 'Head', ids: {spawn: this.id}});
 	    if(typeof res != 'string') {
-	    	res = spawn.createWorkerCreep([CARRY, MOVE], 'Worker 1', {role: 'Pickup'});
+	    	res = spawn.createWorkerCreep([CARRY, MOVE], 'Worker 1', {role: 'Pickup', ids: {spawn: this.id}});
 	    }
 	}
 	
@@ -53,19 +53,19 @@ for(spawn in Game.spawns) {
     if(typeof res != 'string' && num_pickup < spawn.memory.max.worker && (num_miner > num_pickup || num_miner == spawn.memory.max.miner)) {
 	    //var body = [MOVE, CARRY, WORK, MOVE, CARRY, WORK, MOVE, CARRY, CARRY, MOVE, CARRY, WORK, MOVE, CARRY, CARRY, MOVE, CARRY, WORK];
 	    var body = [MOVE, CARRY, CARRY, MOVE, CARRY, CARRY, MOVE, CARRY, CARRY, MOVE, CARRY, CARRY, MOVE, CARRY, CARRY, MOVE, CARRY, CARRY, MOVE, CARRY, CARRY, MOVE, CARRY, CARRY, MOVE];
-	    res = spawn.createLongestCreep(body, 'Worker', {role: 'Pickup'});
+	    res = spawn.createLongestCreep(body, 'Worker', {role: 'Pickup', ids: {spawn: this.id}});
     }
     
     //console.log(typeof res != 'string' && num_miner < spawn.memory.max.miner);
     
     if(typeof res != 'string' && num_miner < spawn.memory.max.miner) {
 	    var body = [MOVE, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK];
-	    res = spawn.createLongestCreep(body, 'Head', {role: 'Head'});
+	    res = spawn.createLongestCreep(body, 'Head', {role: 'Head', ids: {spawn: this.id}});
 	}
     
     if(typeof res != 'string' && num_tail < spawn.memory.max.tail) {
 	    var body = [MOVE, CARRY, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK]
-	    res = spawn.createLongestCreep(body, 'Tail', {role: 'Tail'});
+	    res = spawn.createLongestCreep(body, 'Tail', {role: 'Tail', ids: {spawn: this.id}});
     }
     if(typeof res == 'string') {
     	console.log(res + " has been created");
