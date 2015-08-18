@@ -8,12 +8,14 @@ Creep.prototype.Tail = function() {
 	if(this.memory.role.toUpperCase() != 'tail'.toUpperCase()) return false;
 	if(this.target === null) {
 		Util.setUp(this, 'role.valid_targets');
-		var valid_targts = Object.keys(this.role.valid_targets);
-		var new_target = null;
-		for(i in valid_targts) {
-			var possible_targets = this.spawn.room.find(valid_targts[i], valid_targts[i].filter);
+		for(i in this.role.valid_targets) {
+		    var num = i;
+		    var filter = this.role.valid_targets[i];
+		    if(isNaN(i)) var num = Memory.constants[i];
+		    if(isNaN(this.role.valid_targets[i])) var filter = Memory.constants[this.role.valid_targets[i]];
+			var possible_targets = this.spawn.room.find(num, filter);
 			if(possible_targets.length) {
-				new_target = possible_targets[Math.floor(Math.random()*possible_targets.length)];
+				var new_target = possible_targets[Math.floor(Math.random()*possible_targets.length)];
 				if(this.setTarget(new_target, new_target.pos.getFreeSpace())) break;
 			}
 		}

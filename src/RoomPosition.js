@@ -46,6 +46,7 @@ RoomPosition.prototype.toString = function() {
 
 RoomPosition.prototype.getFreeSpace = function() {
 	Util.setUp(Memory, 'global.RoomPosition.RecheckTime');
+	Util.setUp(this.memory, 'freeSpace.lastCheck');
 	if(this.memory.freeSpace || this.memory.freeSpace.lastCheck > Memory.global.RoomPosition.RecheckTime) {
 		this.memory.freeSpace = {space: 0};
 		for(var i = -1; i <= 1; i++) {
