@@ -11,7 +11,7 @@ Creep.prototype.Tail = function() {
 		var valid_targts = Object.keys(this.role.valid_targets);
 		var new_target = null;
 		for(i in valid_targts) {
-			var possible_targets = this.spawn.room.find(i, i.filter);
+			var possible_targets = this.spawn.room.find(valid_targts[i], valid_targts[i].filter);
 			if(possible_targets.length) {
 				new_target = possible_targets[Math.floor(Math.random()*possible_targets.length)];
 				if(this.setTarget(new_target, new_target.pos.getFreeSpace())) break;
