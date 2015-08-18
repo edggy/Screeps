@@ -441,7 +441,7 @@ Creep.prototype.feed = function(dir, spread) {
 }
 
 Creep.prototype.feedForward = function(dir, spread) {
-	dir = dir + this.pos.getDirectionTo(target);
+	dir = dir + this.pos.getDirectionTo(this.target);
 	spread = spread || 2
 	for(var i = -spread; i <= spread; i++) {
 	    var creep_at = this.room.lookForAt('creep', this.pos.look((dir+i+16)%8))[0];
