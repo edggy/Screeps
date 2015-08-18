@@ -24,6 +24,9 @@ Creep.prototype.Tail = function() {
 	this.moveTo(target);
 	this[this.role.valid_targets.action](target);
 	this.feedForward();
+	if(Game.time % 100 >= Math.random()*100) {
+		this.target === null;
+	}
 	return true;
 }
 
