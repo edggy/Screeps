@@ -9,6 +9,13 @@
 
 var Util = require('Util');
 
+RoomPosition.prototype.constructor = function(x, y, roomName) {
+	this.x = x;
+	this.y = y;
+	this.roomName = roomName;
+	Util.setUp(this.memory, 'usage');
+}
+
 Object.defineProperty(RoomPosition.prototype, "room", {
 	enumerable: true,
     get: function() {
