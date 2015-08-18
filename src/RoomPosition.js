@@ -189,7 +189,7 @@ RoomPosition.prototype.update = function() {
     }
 }
 
-RoomPosition.prototype.walkCost() {
+RoomPosition.prototype.walkCost = function() {
 	var terrain = this.walkable();
 	if(terrain > 0) return terrain;
 	return Number.MAX_SAFE_INTEGER
