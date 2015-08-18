@@ -12,14 +12,13 @@ Creep.prototype.Tail = function() {
 		    var num = i;
 		    var filter = this.role.valid_targets[i];
 		    if(isNaN(i)) var num = Memory.constants[i];
-		    if(isNaN(this.role.valid_targets[i])) var filter = Memory.constants[this.role.valid_targets[i]];
+		    if(isNaN(this.role.valid_targets[i])) var filter = Memory.constants[this.role.valid_targets[i].filter];
 			var possible_targets = this.spawn.room.find(num, filter);
 			if(possible_targets.length) {
 				var new_target = possible_targets[Math.floor(Math.random()*possible_targets.length)];
-				if(this.setTarget(new_target, new_target.pos.getFreeSpace())) {
-					this.memory.action = this.role.valid_targets[i].action;
-					break;
-				}
+				this.memory.action = this.role.valid_targets[i].action;
+				if(this.setTarget(new_target, new_target.pos.getFreeSpace())) break;
+
 			}
 		}
 	}
