@@ -41,17 +41,17 @@ setUp = function(start, memory_path) {
 	if(start.memory_path != undefined) return true;
 	var split = memory_path.split('.');
 	if(split.length) {
-    	var path = '';
+		var path = '';
     	for(var i = 0; i < split.length; i++) {
-    		path += '[' + split[i] + ']';
+    		if(start[split[i]] === undefined) start[split[i]] = {};
+    		console.log(start[split[i]] + ' ' + split[i]);
     		
-    		if(start.path === undefined) start.path = {};
-    		if(typeof start.path === 'object') continue;
-    		return false;
+    		if(typeof start[split[i]] != 'object') return false;
+    		start = start[split[i]];
     	}
 	}
 	else {
-		start[memory_path] = {};
+		return false;
 	}
 	return true;
 }
