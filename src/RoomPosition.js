@@ -28,7 +28,8 @@ Object.defineProperty(RoomPosition.prototype, "memory", {
 	enumerable: true,
     get: function() {
     	var name = this.x+','+this.y
-    	return Memory.rooms[this.roomName]['map'][this.toString()];
+    	if(this.room.map[name] === undefined) this.room.map[name] = {};
+    	return this.room.map[name];
     }
 });
 
@@ -59,8 +60,7 @@ RoomPosition.prototype.getFreeSpace = function() {
 }
 
 RoomPosition.prototype.walkable = function() {
-    var room = Game.rooms[this.roomName];
-    var at_loc = room.lookAt(this);
+    var at_loc = this.room.lookAt(this);
     for(t in at_loc) {
         t = at_loc[t];
         if(t.type === 'terrain' && t.terrain === 'wall') return 0;
@@ -80,14 +80,19 @@ RoomPosition.prototype.walkable = function() {
 }
 
 RoomPosition.prototype.mark = function(value) {
+	if(this.memory.usage == undefined) this.memory.usage = {};
+	
     this.memory[this.toString()] = value;
     this.memory.usage = 0;
 }
 
 RoomPosition.prototype.distTo = function(roomPosition) {
-	Util.setUp(roomPosition, 'memory.usage');
-	roomPosition.memory.usage = 0;
+	//Util.setUp(roomPosition, 'memory.usage');
+	
     roomPosition = roomPosition.pos;
+    if(roomPosition.memory.usage == undefined) roomPosition.memory.usage = {};
+    roomPosition.memory.usage = 0;
+    
     if(this.memory[roomPosition.toString()] === undefined) {
         if(roomPosition.memory[this.toString()] === undefined) {
             roomPosition.mark();
