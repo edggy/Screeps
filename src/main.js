@@ -10,19 +10,6 @@ Util.setUp(Memory, 'global.roles.Tail.valid_targets');
 
 if(Memory.data == undefined) Memory.data = {};
 
-if(Game.time % 100 == 0) {
-	for(var i in Memory.creeps) {
-	    if(!Game.creeps[i]) {
-	        delete Memory.creeps[i];
-	    }
-	}
-	for(var i in Game.creeps) {
-	    if(!Memory.creeps[i]) {
-	        Memory.creeps[i] = Game.creeps[i];
-	    }
-	}
-}
-
 var spawn_count = 0;
 for(spawn in Game.spawns) {
 	var res = false;

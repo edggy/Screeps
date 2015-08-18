@@ -21,8 +21,8 @@ Creep.prototype.Tail = function() {
 		}
 	}
 	if(this.target === null) return;
-	this.moveTo(target);
-	this[this.role.valid_targets.action](target);
+	this.moveTo(this.target);
+	this[this.role.valid_targets.action](this.target);
 	this.feedForward();
 	if(Game.time % 100 >= Math.random()*100) {
 		this.target === null;

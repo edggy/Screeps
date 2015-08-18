@@ -57,7 +57,7 @@ RoomPosition.prototype.getFreeSpace = function() {
 		}
 		this.memory.freeSpace.lastCheck = Game.time;
 	}
-	return this.memory.freeSpace;
+	return this.memory.freeSpace.space;
 }
 
 RoomPosition.prototype.walkable = function() {

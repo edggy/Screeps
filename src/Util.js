@@ -31,7 +31,7 @@ isValidId = function(id) {
 module.exports.isValidId = isValidId;
 
 isValid = function(object) {
-	if(typeof object.id === 'function' && isValidId(object.id)) return true; 
+	if(typeof object.id === 'string' && isValidId(object.id)) return true; 
 	return false;
 }
 module.exports.isValid = isValid;
@@ -77,4 +77,16 @@ getDirection = function(i, j) {
 }
 module.exports.isValid = getDirection;
 
-
+syncCreeps = function() {
+	for(var i in Memory.creeps) {
+	    if(!Game.creeps[i]) {
+	        delete Memory.creeps[i];
+	    }
+	}
+	for(var i in Game.creeps) {
+	    if(!Memory.creeps[i]) {
+	        Memory.creeps[i] = Game.creeps[i];
+	    }
+	}
+}
+module.exports.syncCreeps = syncCreeps;
