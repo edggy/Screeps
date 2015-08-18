@@ -38,7 +38,7 @@ module.exports.isValid = isValid;
 
 setUp = function(start, memory_path) {
     
-	if(start.memory_path != undefined) return;
+	if(start.memory_path != undefined) return true;
 	var split = memory_path.split('.');
 	if(split.length) {
     	var path = '';
