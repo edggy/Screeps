@@ -28,7 +28,7 @@ Object.defineProperty(RoomPosition.prototype, "memory", {
     get: function() {
     	var name = this.x+','+this.y
     	Util.setUp(Memory.rooms[this.roomName], this.toString());
-    	return Memory.rooms[this.roomName][this.toString()];
+    	return Memory.rooms[this.roomName]['map'][this.toString()];
     }
 });
 
