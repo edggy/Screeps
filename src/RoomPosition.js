@@ -28,6 +28,7 @@ Object.defineProperty(RoomPosition.prototype, "memory", {
 	enumerable: true,
     get: function() {
     	var name = this.x+','+this.y
+    	if(this.room === undefined) return undefined;
     	if(this.room.map[name] === undefined) this.room.map[name] = {};
     	return this.room.map[name];
     }

@@ -75,7 +75,7 @@ getDirection = function(i, j) {
 	res.y = Math.sign(Math.sin((dir*45-90-45)/180*Math.PI))
 	return res;
 }
-module.exports.isValid = getDirection;
+module.exports.getDirection = getDirection;
 
 syncCreeps = function() {
 	for(var i in Memory.creeps) {
