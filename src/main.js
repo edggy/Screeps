@@ -3,6 +3,10 @@ require('Room');
 require('Spawn');
 require('Creep');
 
+var Util = require('Util');
+
+Util.setUp(Memory, 'really.long.data.structure');
+
 if(Memory.data == undefined) Memory.data = {};
 
 if(Game.time % 100 == 0) {
