@@ -13,7 +13,9 @@ Creep.prototype.Head = function() {
 		    var filter = this.role.valid_targets[i];
 		    if(isNaN(i)) var num = Memory.constants[i];
 		    if(isNaN(this.role.valid_targets[i])) var filter = Memory.constants[this.role.valid_targets[i].filter];
-			var possible_targets = this.spawn.room.find(num, filter);
+		    var possible_targets = this.spawn.room.find(num, {
+			    filter: { structureType: filter }
+			});
 			if(possible_targets.length) {
 				var new_target = possible_targets[Math.floor(Math.random()*possible_targets.length)];
 				this.memory.action = this.role.valid_targets[i].action;
