@@ -94,7 +94,7 @@ RoomPosition.prototype.distTo = function(roomPosition) {
 	//Util.setUp(roomPosition, 'memory.usage');
 	
     roomPosition = roomPosition.pos;
-    if(roomPosition.memory.usage == undefined) roomPosition.memory.usage = {};
+    if(roomPosition.memory.usage == undefined) roomPosition.memory.usage = 0;
     roomPosition.memory.usage = 0;
     
     if(this.memory[roomPosition.toString()] === undefined) {
@@ -109,8 +109,9 @@ RoomPosition.prototype.distTo = function(roomPosition) {
 }
 
 RoomPosition.prototype.dirTo = function(roomPosition) {
+	roomPosition = roomPosition.pos;
 	roomPosition.memory.usage = 0;
-    roomPosition = roomPosition.pos;
+    
     var best = {dist: Number.MAX_SAFE_INTEGER, dir: 0, usage: Number.MAX_SAFE_INTEGER};
     for(var i = -1; i <= 1; i++) {
         for(var j = -1; j <= 1; j++) {
