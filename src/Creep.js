@@ -375,7 +375,7 @@ Creep.prototype.setTarget = function(targets, limit) {
 		if(this.canClaim(cur_target, limit)) {
 			this.claim(cur_target);
 			this.unclaim(this.memory.target);
-			this.memory.target = cur_target;
+			this.memory.ids.target = cur_target;
 			return true;
 		}
 	}

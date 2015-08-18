@@ -16,13 +16,16 @@ Creep.prototype.Tail = function() {
 			var possible_targets = this.spawn.room.find(num, filter);
 			if(possible_targets.length) {
 				var new_target = possible_targets[Math.floor(Math.random()*possible_targets.length)];
-				if(this.setTarget(new_target, new_target.pos.getFreeSpace())) break;
+				if(this.setTarget(new_target, new_target.pos.getFreeSpace())) {
+					this.memory.action = this.role.valid_targets[i].action;
+					break;
+				}
 			}
 		}
 	}
 	if(this.target === null) return;
 	this.moveTo(this.target);
-	this[this.role.valid_targets.action](this.target);
+	this[this.memory.action](this.target);
 	this.feedForward();
 	if(Game.time % 100 >= Math.random()*100) {
 		this.target === null;
