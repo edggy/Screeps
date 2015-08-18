@@ -372,6 +372,7 @@ Creep.prototype.setTarget = function(targets, limit) {
 	targets = Util.toIds(targets);
 	for(i in targets) {
 		cur_target = targets[i];
+		if(this.claimed(cur_target)) return true;
 		if(this.canClaim(cur_target, limit)) {
 			this.claim(cur_target);
 			this.unclaim(this.memory.target);
