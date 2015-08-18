@@ -65,6 +65,7 @@ for(spawn in Game.spawns) {
 
 for(creep in Game.creeps) {
     var creep = Game.creeps[creep];
+    if(creep.memory.ids.spawn === undefined) creep.memory.ids = {spawn: '55d21ac8bbc786b40f59f8fa'};
     creep.tick();
     //console.log(Game.rooms[creep.pos.roomName]);
 }
