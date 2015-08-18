@@ -30,16 +30,16 @@ Room.prototype.tick = function() {
     var start = Game.getUsedCpu();
     var count = 0
     var end = Game.getUsedCpu();
-    //while(Game.getUsedCpu() < Game.cpuLimit - (end - start)) {
-    /*for(var i = 0; i < 50; i++){
+    while(Game.getUsedCpu() < Game.cpuLimit - (end - start)) {
+    //for(var i = 0; i < 50; i++){
         //console.log(this.memory.mapping_data.next);
     	if(this.memory.mapping_data.next.memory.usage === undefined) this.memory.mapping_data.next.memory.usage = 0;
         this.memory.mapping_data.next.memory.usage++;
-        if(this.memory.mapping_data.next.memory.usage > 200) delete this.memory.mapping_data.next.memory;
+        if(this.memory.mapping_data.next.memory.usage > 200) delete this.map[this.memory.mapping_data.next.toString()];
         else this.memory.mapping_data.next.update();
         this.memory.mapping_data.next = this.memory.mapping_data.next.nextInRoom();
         count++;
-    }*/
+    }
     end = Game.getUsedCpu();
     //console.log('CPU: ' + (end - start) + '\nTiles: ' + count + "\n% of room: " + (count/(50*50)*100) + "\n% of room per CPU: " + (count/(50*50)*100)/(end - start));
 }
