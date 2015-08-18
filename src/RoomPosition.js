@@ -13,7 +13,8 @@ RoomPosition.prototype.constructor = function(x, y, roomName) {
 	this.x = x;
 	this.y = y;
 	this.roomName = roomName;
-	Util.setUp(this.memory, 'usage');
+	if(this.room.map[this.toString()] == undefined) this.room.map[this.toString()] = {};
+	if(this.memory.usage == undefined) this.memory.usage = {};
 }
 
 Object.defineProperty(RoomPosition.prototype, "room", {
@@ -27,7 +28,6 @@ Object.defineProperty(RoomPosition.prototype, "memory", {
 	enumerable: true,
     get: function() {
     	var name = this.x+','+this.y
-    	Util.setUp(Memory.rooms[this.roomName], this.toString());
     	return Memory.rooms[this.roomName]['map'][this.toString()];
     }
 });
