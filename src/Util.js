@@ -40,11 +40,8 @@ setUp = function(start, memory_path) {
     
 	if(start.memory_path != undefined) return;
 	var split = memory_path.split('.');
-	if(split) {
-    	start[memory_path] = {};
-	}
-	else {
-	    var path = '';
+	if(split.length) {
+    	var path = '';
     	for(var i = 0; i < split.length; i++) {
     		path += '[' + split[i] + ']';
     		
@@ -52,6 +49,9 @@ setUp = function(start, memory_path) {
     		if(typeof start.path === 'object') continue;
     		return false;
     	}
+	}
+	else {
+		start[memory_path] = {};
 	}
 	return true;
 }
