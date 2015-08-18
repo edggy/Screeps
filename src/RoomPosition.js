@@ -63,6 +63,7 @@ RoomPosition.prototype.getFreeSpace = function() {
 
 RoomPosition.prototype.walkable = function() {
     var at_loc = this.room.lookAt(this);
+    var cost = 2;
     for(t in at_loc) {
         t = at_loc[t];
         if(t.type === 'terrain' && t.terrain === 'wall') return 0;
@@ -75,10 +76,11 @@ RoomPosition.prototype.walkable = function() {
             if(t.structure.structureType === STRUCTURE_PORTAL) return 0;
             if(t.structure.structureType === 'storage') return 0;
             
-            if(t.structure.structureType === STRUCTURE_ROAD) return 2;
+            if(t.structure.structureType === STRUCTURE_ROAD) return 1;
         }
+        if(t.type === 'terrain' && t.terrain === 'swamp') cost = 10;
     }
-    return 1;
+    return cost;
 }
 
 RoomPosition.prototype.mark = function(value) {
@@ -181,10 +183,16 @@ RoomPosition.prototype.update = function() {
         }
     }
     for(loc in best) {
-        var cost = 2;
+        var cost = this.walkCost();
         this.memory[loc] = best[loc] + cost;
         //console.log('Updated ' + this + ' ' + loc + ' ' + this.memory[loc]);
     }
+}
+
+RoomPosition.prototype.walkCost() {
+	var terrain = this.walkable();
+	if(terrain > 0) return terrain;
+	return Number.MAX_SAFE_INTEGER
 }
 
 RoomPosition.prototype.look = function(dir) {
