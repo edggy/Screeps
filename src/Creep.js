@@ -454,10 +454,10 @@ Creep.prototype.feedForward = function(dir, spread) {
 
 Object.defineProperty(Creep.prototype, "role", {
     get: function() {
-    	return Memory.roles[this.memory.role];
+    	return Memory.global.roles[this.memory.role];
     },
 	set: function(value) {
-		Memory.roles[this.memory.role] = value;
+		Memory.global.roles[this.memory.role] = value;
 	}
 });
 
@@ -467,8 +467,8 @@ Object.defineProperty(Creep.prototype, "spawn", {
     	return Game.getObjectById(this.memory.ids.spawn);
     },
 	set: function(value) {
-		if(Util.isValidId(value)) Memory.roles[this.memory.role] = value;
-		else if(Util.isValid(value)) Memory.roles[this.memory.role] = value.id;
+		if(Util.isValidId(value)) Memory.global.roles[this.memory.role] = value;
+		else if(Util.isValid(value)) Memory.global.roles[this.memory.role] = value.id;
 	}
 });
 
@@ -479,8 +479,8 @@ Object.defineProperty(Creep.prototype, "target", {
     	return Game.getObjectById(this.memory.ids.target);
     },
 	set: function(value) {
-		if(Util.isValidId(target)) Memory.roles[this.memory.role] = target;
-		else if(Util.isValid(target)) Memory.roles[this.memory.role] = target.id;
+		if(Util.isValidId(target)) Memory.global.roles[this.memory.role] = target;
+		else if(Util.isValid(target)) Memory.global.roles[this.memory.role] = target.id;
 	}
 });
 
