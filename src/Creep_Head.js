@@ -5,9 +5,9 @@
 var Util = require('Util');
 
 Creep.prototype.Head = function() {
-	if(this.memory.role.toUpperCase() != 'tail'.toUpperCase()) return false;
+	if(this.memory.role.toUpperCase() != 'head'.toUpperCase()) return false;
 	if(this.target === null) {
-		Util.setUp(this, 'role.valid_targets');
+		Util.setUp(Memory, 'global.roles.head.valid_targets');
 		var valid_targts = Object.keys(this.role.valid_targets);
 		var new_target = null;
 		for(i in valid_targts) {
