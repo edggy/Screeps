@@ -27,7 +27,7 @@ Object.defineProperty(RoomPosition.prototype, "room", {
 Object.defineProperty(RoomPosition.prototype, "memory", {
 	enumerable: true,
     get: function() {
-    	var name = this.x+','+this.y
+    	var name = this.toString();//this.x+','+this.y
     	if(this.room === undefined) return undefined;
     	if(this.room.map[name] === undefined) this.room.map[name] = {};
     	return this.room.map[name];
@@ -176,15 +176,20 @@ RoomPosition.prototype.update = function() {
             if(cur_pos === undefined) continue;
             
             for(loc in cur_pos.memory) {
-                if(best[loc] === undefined || cur_pos.memory[loc] < best[loc]) {
+            	if(loc == this.toString()) best[loc] = 0;
+            	else if(best[loc] === undefined || cur_pos.memory[loc] < best[loc]) {
                     best[loc] = cur_pos.memory[loc];
                 }
             }
         }
     }
     for(loc in best) {
-        var cost = this.walkCost();
-        this.memory[loc] = best[loc] + cost;
+    	if(loc == this.toString()) best[loc] = 0;
+    	else {
+    		var cost = this.walkCost();
+    		this.memory[loc] = best[loc] + cost;
+    	}
+        
         //console.log('Updated ' + this + ' ' + loc + ' ' + this.memory[loc]);
     }
 }

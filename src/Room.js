@@ -14,7 +14,8 @@ var Util = require('Util');
 Object.defineProperty(Room.prototype, "map", {
 	enumerable: true,
     get: function() {
-    	return Memory.rooms[this.name];
+    	if(Memory.rooms[this.name].map === undefined) Memory.rooms[this.name].map = {};
+    	return Memory.rooms[this.name].map;
     }
 });
 
