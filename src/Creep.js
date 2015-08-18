@@ -457,7 +457,7 @@ Object.defineProperty(Creep.prototype, "role", {
     	return Memory.global.roles[this.memory.role];
     },
 	set: function(value) {
-		Memory.global.roles[this.memory.role] = value;
+		this.memory.role = value;
 	}
 });
 
@@ -467,20 +467,20 @@ Object.defineProperty(Creep.prototype, "spawn", {
     	return Game.getObjectById(this.memory.ids.spawn);
     },
 	set: function(value) {
-		if(Util.isValidId(value)) Memory.global.roles[this.memory.role] = value;
-		else if(Util.isValid(value)) Memory.global.roles[this.memory.role] = value.id;
+		if(Util.isValidId(value)) this.memory.ids.spawn = value;
+		else if(Util.isValid(value)) this.memory.ids.spawn = value.id;
 	}
 });
 
 Object.defineProperty(Creep.prototype, "target", {
     get: function() {
-    	var res = Game.getObjectById(this.memory.ids.target);
+    	//var res = Game.getObjectById(this.memory.ids.target);
     	//if(res === null) return undefined;
     	return Game.getObjectById(this.memory.ids.target);
     },
 	set: function(value) {
-		if(Util.isValidId(target)) Memory.global.roles[this.memory.role] = target;
-		else if(Util.isValid(target)) Memory.global.roles[this.memory.role] = target.id;
+		if(Util.isValidId(value)) this.memory.ids.target = value;
+		else if(Util.isValid(value)) this.memory.ids.target = value.id;
 	}
 });
 
