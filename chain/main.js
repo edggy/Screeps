@@ -12,6 +12,7 @@ require('Creep');
 var spawn_count = 0;
 for(spawn in Game.spawns) {
     var spawn = Game.spawns[spawn];
+    if(spawn.memory.max === undefined) spawn.memory.max = {miner: 0, worker: 0, tail: 0};
 
     if(spawn.room.energyAvailable >= spawn.room.energyCapacityAvailable) {
 	    
@@ -107,15 +108,15 @@ for(creep in Game.creeps) {
     else if(_.startsWith(creep.name, 'Head')) {
         if(creep.target == null) {
             var possibe = []
-            for(room in Game.rooms) {
+            for(var room in Game.rooms) {
                 room = Game.rooms[room];
                 var targets = room.find(FIND_SOURCES);
-                for(target in targets){
+                for(var target in targets){
                     target = targets[target];
                     var near_target = room.lookForAtArea('creep', target.pos.y-1, target.pos.x-1, target.pos.y+1, target.pos.x+1);
                     var count = 0;
-                    for(j in near_target) {
-                        for(k in near_target[j]) {
+                    for(var j in near_target) {
+                        for(var k in near_target[j]) {
                             if(near_target[j][k] != undefined && near_target[j][k][0].memory.role == 'Head') {
                                 count++
                             }
@@ -170,11 +171,11 @@ for(flag in Game.flags) {
     }
 }
 var new_deposit_targets = []
-for(target_group in deposit_targets) {
+for(var target_group in deposit_targets) {
     new_deposit_targets.push([])
     for(target in deposit_targets[target_group]) {
         target = deposit_targets[target_group][target];
-        var near_target = flag.room.lookForAtArea('creep', target.pos.y-1, target.pos.x-1, target.pos.y+1, target.pos.x+1);
+        var near_target = target.room.lookForAtArea('creep', target.pos.y-1, target.pos.x-1, target.pos.y+1, target.pos.x+1);
         var done = false;
         for(j in near_target) {
             for(k in near_target[j]) {
@@ -367,6 +368,7 @@ for(i in creep_list) {
 }
 
 if(closest_creep.creep) closest_creep.creep.moveTo(deposit_targets[0][0]);
+if(Memory.data === undefined) Memory.data = {};
 Memory.data.stuck = false;
 //var creep = creep_list[creep_list.length-1];
 

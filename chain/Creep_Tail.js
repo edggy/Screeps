@@ -11,8 +11,8 @@ Creep.prototype.Tail = function() {
 	
 	var near_target = this.room.lookForAtArea('creep', this.pos.y-1, this.pos.x-1, this.pos.y+1, this.pos.x+1);
     var count = 0;
-    for(j in near_target) {
-        for(k in near_target[j]) {
+    for(var j in near_target) {
+        for(var k in near_target[j]) {
             if(near_target[j][k] != undefined && near_target[j][k][0].memory.role == 'Work') {
                 near_target[j][k][0].transferEnergy(this);
             }
