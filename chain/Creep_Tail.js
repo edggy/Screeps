@@ -75,8 +75,8 @@ Creep.prototype.Tail = function() {
 	}
 	//this.log(this.memory.findNewTarget.args)
 	if(this.memory.findNewTarget === undefined) this.memory.findNewTarget = {fun: function(target){return true;}};
-	else if(this.memory.findNewTarget.args != undefined) this.memory.findNewTarget = {args: i.limit, fun: function(creep) {var target = creep.target; return !eval(creep.memory.args);}};
-	else this.memory.findNewTarget = {fun: function(target){return false;}};
+	else if(this.memory.args != undefined) this.memory.findNewTarget = {args: i.limit, fun: function(creep) {var target = creep.target; return !eval(creep.memory.args);}};
+	else this.memory.findNewTarget = {fun: function(target){return true;}};
 	//this.log(this.memory.findNewTarget.fun)
 	//this.unclaimAll();
 	//this.target = null;
@@ -88,7 +88,7 @@ Creep.prototype.Tail = function() {
 	//this.log(this.memory.action +': ' + err)
 	if(this.memory.time === undefined) this.memory.time = 0;
 	var target = this.target;
-	//this.log(this.target + ' ' + this.memory.findNewTarget.fun(target) + ' ' + (this.target.hits!=undefined?this.target.hits:'?') + ' ' + err)
+	//this.log(this.target + ' ' + this.memory.findNewTarget.fun(this) + ' ' + (this.target.hits!=undefined?this.target.hits:'?') + ' ' + this.memory.args)
 	if(Game.time - this.memory.time >= Math.random()*100 + 900 || err == ERR_FULL || err == ERR_INVALID_TARGET || this.memory.findNewTarget.fun(this)) {
 	    //this.log(this.memory.findNewTarget.fun + ' ' + this.memory.findNewTarget.fun(this));
 	    this.memory.time = Game.time;
