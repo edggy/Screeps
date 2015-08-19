@@ -7,7 +7,7 @@
  * var mod = require('creep_ext'); // -> 'a thing'
  */
  
-
+require('RoomPosition');
 require('Creep_Tail');
 require('Creep_Head');
 var Util = require('Util');
@@ -69,7 +69,7 @@ Creep.prototype.tick = function() {
     else if(this.Head()) {
     }
     else if(this.memory.role.toUpperCase() == 'pickup'.toUpperCase()){
-    	if(this.carry.energy >= this.carryCapacity) {
+    	if(this.carry.energy >= this.carryCapacity || (!this.room.find(FIND_SOURCES_ACTIVE).length && !this.room.find(FIND_DROPPED_ENERGY).length)) {
     	    this.unclaim(this.memory.target);
             this.memory.state = 'deliver';
             this.memory.target = null;
@@ -128,6 +128,7 @@ Creep.prototype.tick = function() {
             }
             
             var target = Game.getObjectById(this.memory.target);
+            this.feedAway();
             //console.log(this.memory.target + " " + target);
             if(target == null) {
                 this.unclaim(this.memory.target);
@@ -142,23 +143,30 @@ Creep.prototype.tick = function() {
                 	this.memory.last_action = 0;
                 }
                 else this.memory.last_action++;
-                if(this.memory.last_action > 50 +  + this.pos.distTo(target)/2) {
+                if(this.memory.last_action > 50 + this.pos.distTo(target)/2) {
                     this.unclaim(this.memory.target);
                 	this.memory.target == null;
                 }
             }
-            var dir = this.pos.getDirectionTo(target);
+            
+            /*var dir = this.pos.getDirectionTo(target);
         	//var spot = this.pos.look(dir);
         	var creep = [];
-        	for(var i = -2; i <= 2; i++) {
-        	    var creep_at = this.room.lookForAt('creep', this.pos.look((dir+i+4)%8))[0];
-                if(creep_at != undefined) creep.push(creep_at);
+        	var most_energy = this.energy;;
+        	for(var i = 1; i < 8; i++) {
+        	    //var creep_at = this.room.lookForAt('creep', this.pos.look((dir+i+4)%8))[0];
+        	    var creep_at = this.room.lookForAt('creep', this.pos.look(i))[0];
+                if(creep_at != undefined && creep.energy > most_energy) {
+                    creep = creep_at;
+                    most_energy = creep.energy;
+                }
         	}
+        	this.transferEnergy(creep);*/
         	//creep.push(this.room.lookForAt('creep', this.pos.look(dir+1)));
             //creep.push(this.room.lookForAt('creep', this.pos.look(dir-1)));
-        	if(creep.length) {
-        		this.transferEnergy(creep[0]);
-        	}
+        	//if(creep.length) {
+        	//	this.transferEnergy(creep[0]);
+        	//}
             
         }
         else if(this.memory.state == 'deliver') {
@@ -168,12 +176,14 @@ Creep.prototype.tick = function() {
                 this.memory.type = null;
             }
             if(this.memory.target == null) {
-                if(!Game.spawns.Spawn1.isFull()) {
+                //if(false && !Game.spawns.Spawn1.isFull()) {
+                if(false){
                     this.memory.target = Game.spawns.Spawn1.id;
                     this.memory.type = 'transferEnergy';
                 }
                 else {
                     var targets = [];
+                    if(!this.spawn.isFull()) targets.push(this.spawn);
                     var extensions = Game.spawns.Spawn1.room.find(FIND_MY_STRUCTURES, {
                         filter: { structureType: STRUCTURE_EXTENSION }
                     });
@@ -219,6 +229,7 @@ Creep.prototype.tick = function() {
                 }
             }
             var target = Game.getObjectById(this.memory.target);
+            this.feedTo();
             if(target == null) {
                 this.memory.target = null;
             }
@@ -265,17 +276,22 @@ Creep.prototype.tick = function() {
                     this.memory.state = 'pickup';
                     this.memory.target = null;
                 }
+                
                 //this.say(this.pos.distTo(target)/2);
-                var dir = this.pos.getDirectionTo(target);
+                /*var dir = this.pos.getDirectionTo(target);
             	//var spot = this.pos.look(dir);
             	var creep = [];
+            	var closest = this.pos.getRangeTo(this.target);
             	for(var i = -2; i <= 2; i++) {
             	    var creep_at = this.room.lookForAt('creep', this.pos.look((dir+i+8)%8))[0];
-                    if(creep_at != undefined) creep.push(creep_at);
+                    if(creep_at != undefined && creep_at.pos.getRangeTo(this.target) < closest) {
+                        creep = creep_at;
+                        closest = creep_at.pos.getRangeTo(this.target);
+                    }
             	}
-            	if(creep.length) {
-            		this.transferEnergy(creep[0]);
-            	}
+            	//if(creep.length) {
+            	this.transferEnergy(creep);
+            	//}*/
             }
         }
         else {
@@ -283,7 +299,16 @@ Creep.prototype.tick = function() {
         }
         if(this.memory.verbose && target != null) this.say(this.pos.distTo(target)/2 + ' ' + this.pos.dirTo(target));
     }
-    else if(this.getActiveBodyparts(WORK) > 0) {
+    else {
+        this.target = null;
+        if(_.startsWith(this.name, 'Tail')) this.role = 'Tail';
+        if(_.startsWith(this.name, 'Head')) this.role = 'Head';
+        //Pickup
+        if(_.startsWith(this.name, 'Worker')) this.role = 'Pickup';
+        this.target = null;
+    }
+    /*else if(this.getActiveBodyparts(WORK) > 0) {
+        this.target = null;
         if(this.memory.target === undefined) {
             this.memory.target = null;
         }
@@ -352,10 +377,9 @@ Creep.prototype.tick = function() {
             target = Game.getObjectById('55cfc833da0f8b800f00507d')
             this.moveTo(target);
             this.transferEnergy(target);
-        }*/
-        //this.say(this.pos.distTo(target)/2);
-        //this.say(this.pos.distTo(target));
-    }
+        }
+        //this.say(this.pos.distTo(target)/2
+    }*/
     
 }
 
@@ -369,13 +393,19 @@ Creep.prototype.tick = function() {
 
 Creep.prototype.setTarget = function(targets, limit) {
 	limit = limit || 1;
+	if(Util.isValid(targets)) targets = [targets];
 	targets = Util.toIds(targets);
 	for(i in targets) {
 		cur_target = targets[i];
+		if(Util.isValid(cur_target)) cur_target = cur_target.id;
+		if(!Util.isValidId(cur_target)) return undefined;
+		
 		if(this.claimed(cur_target)) return true;
 		if(this.canClaim(cur_target, limit)) {
+		    
 			this.claim(cur_target);
-			this.unclaim(this.memory.target);
+			this.log(cur_target)
+			this.log(this.unclaim(this.memory.ids.target));
 			this.memory.ids.target = cur_target;
 			return true;
 		}
@@ -388,6 +418,10 @@ Creep.prototype.log = function(string) {
 }
 
 Creep.prototype.claim = function(target) {
+    if(Util.isValid(target)) target = target.id;
+    else if(!Util.isValidId(target)) return undefined;
+    
+    if(!Util.isValid(target)) return undefined;
     if(Memory.data[target] == undefined) Memory.data[target] = {};
     if(Memory.data[target].claims == undefined) Memory.data[target].claims = {};
     if(this.memory.claims == undefined) this.memory.claims = {};
@@ -395,38 +429,58 @@ Creep.prototype.claim = function(target) {
     this.memory.claims[target] = true;
     Memory.data[target].claims[this.id] = true;
 
+    console.log('claiming ' + Memory.data[target].claims[this.id])
     return Object.keys(Memory.data[target].claims).length;
 }
 
 Creep.prototype.unclaim = function(target) {
+    //if(!Util.isValid(target)) return undefined;
+    if(Util.isValid(target)) target = target.id;
+    else if(!Util.isValidId(target)) return undefined;
+    
     if(Memory.data[target] == undefined) Memory.data[target] = {};
     if(Memory.data[target].claims == undefined) Memory.data[target].claims = {};
     if(this.memory.claims == undefined) this.memory.claims = {};
+    
+    
+    if(!this.claimed(target)) return undefined
     delete this.memory.claims[target];
+    
+    console.log('deleting ' + Memory.data[target].claims[this.id])
     delete Memory.data[target].claims[this.id];
     if(Object.keys(Memory.data[target].claims).length == 0) {
         delete Memory.data[target].claims;
-         if(Object.keys(Memory.data[target]).length == 0) delete Memory.data[target];
+        if(Object.keys(Memory.data[target]).length == 0) delete Memory.data[target];
         return 0;
     }
     return Object.keys(Memory.data[target].claims).length;
 }
 
 Creep.prototype.unclaimAll = function() {
+    
     for(var i in this.memory.claims) {
-        delete this.memory.claims[i];
-        delete Memory.data[i].claims[this.id];
-        if(Object.keys(Memory.data[i].claims).length == 0) delete Memory.data[i].claims;
+        this.unclaim(i);
+        if(Memory.data[i].claims != undefined && Object.keys(Memory.data[i].claims).length == 0) delete Memory.data[i].claims;
     }
 }
 
 Creep.prototype.canClaim = function(target, num) {
-    if(Memory.data[target] == undefined || Memory.data[target].claims == undefined) return 0 < num;
+    this.log(target)
+    if(Util.isValid(target)) target = target.id;
+    else if(!Util.isValidId(target)) return undefined;
+    if(Memory.data[target] === undefined) return num > 0;
+    if(Memory.data[target].claims === undefined) return num > 0;
+    
     return Object.keys(Memory.data[target].claims).length < num;
 }
 
 Creep.prototype.claimed = function(target) {
-    return target.id in this.memory.claims;
+    if(Util.isValid(target)) target = target.id;
+    else if(!Util.isValidId(target)) return undefined;
+    
+    if(this.memory.claims == undefined) this.memory.claims = {};
+    if(target === undefined || target === null) return undefined;
+    return (target in this.memory.claims);
 }
 
 Creep.prototype.feed = function(dir, spread) {
@@ -441,6 +495,49 @@ Creep.prototype.feed = function(dir, spread) {
 	}
 }
 
+Creep.prototype.feedAway = function() {
+    if(this.energy <= 1) return;
+    this.target = this.memory.target
+    var creeps = this.room.lookForAtArea('creep', this.pos.y-1, this.pos.x-1, this.pos.y+1, this.pos.x+1);
+    var max_dist = this.pos.getRangeTo(this.target);
+    var best_creep = this;
+    var energy = 0;
+    for(i in creeps) {
+        for(j in creeps[i]) {
+            var cur_creep = creeps[i][j][0];
+            if(cur_creep != undefined && cur_creep.pos.getRangeTo(cur_creep.memory.target) > max_dist && cur_creep.energy < cur_creep.carryCapacity&& cur_creep.carryCapacity > energy) {
+                max_dist = cur_creep.pos.getRangeTo(cur_creep.memory.target);
+                min_energy = cur_creep.carryCapacity;
+                best_creep = cur_creep;
+            }
+        }
+    }
+    return this.transferEnergy(best_creep);
+}
+
+Creep.prototype.feedTo = function() {
+    if(this.energy <= 1) return;
+    this.target = this.memory.target
+    var creeps = this.room.lookForAtArea('creep', this.pos.y-1, this.pos.x-1, this.pos.y+1, this.pos.x+1);
+    var min_dist = this.pos.getRangeTo(this.target);
+    var best_creep = this;
+    var energy = 0;
+    for(i in creeps) {
+        for(j in creeps[i]) {
+            var cur_creep = creeps[i][j][0];
+            //console.log(this.transferEnergy(cur_creep));
+            if(cur_creep != undefined && cur_creep.pos.getRangeTo(cur_creep.memory.target) <= min_dist && cur_creep.energy < cur_creep.carryCapacity && cur_creep.carryCapacity > energy) {
+                min_dist = cur_creep.pos.getRangeTo(cur_creep.memory.target);
+                min_energy = cur_creep.carryCapacity;
+                best_creep = cur_creep;
+                this.transferEnergy(best_creep);
+            }
+        }
+    }
+    //console.log(this.transferEnergy(best_creep))
+    return this.transferEnergy(best_creep);
+}
+
 Creep.prototype.feedForward = function(dir, spread) {
 	dir = dir + this.pos.getDirectionTo(this.target);
 	spread = spread || 2
@@ -451,41 +548,6 @@ Creep.prototype.feedForward = function(dir, spread) {
         	break;
         }
 	}
-}
-
-Creep.prototype.feedAway = function() {
-    this.target = this.memory.target
-    var creeps = this.room.lookForAtArea('creep', this.pos.y-1, this.pos.x-1, this.pos.y+1, this.pos.x+1);
-    var max_dist = this.pos.getRangeTo(this.target);
-    var best_creep = this;
-    for(i in creeps) {
-        for(j in creeps[i]) {
-            var cur_creep = creeps[i][j][0];
-            if(cur_creep != undefined && cur_creep.pos.getRangeTo(cur_creep.target) > max_dist && cur_creep.energy < cur_creep.carryCapacity) {
-                max_dist = cur_creep.pos.getRangeTo(cur_creep.target);
-                best_creep = cur_creep;
-            }
-        }
-    }
-    this.transferEnergy(best_creep);
-}
-
-Creep.prototype.feedTo = function() {
-    this.target = this.memory.target
-    var creeps = this.room.lookForAtArea('creep', this.pos.y-1, this.pos.x-1, this.pos.y+1, this.pos.x+1);
-    var min_dist = this.pos.getRangeTo(this.target);
-    var best_creep = this;
-    for(i in creeps) {
-        for(j in creeps[i]) {
-            var cur_creep = creeps[i][j][0];
-            
-            if(cur_creep != undefined && cur_creep.pos.getRangeTo(cur_creep.target) < min_dist && cur_creep.energy < cur_creep.carryCapacity) {
-                min_dist = cur_creep.pos.getRangeTo(cur_creep.target);
-                best_creep = cur_creep;
-            }
-        }
-    }
-    this.transferEnergy(best_creep);
 }
 
 Object.defineProperty(Creep.prototype, "role", {
