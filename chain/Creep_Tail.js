@@ -56,7 +56,7 @@ Creep.prototype.Tail = function() {
 				this.target = target;
 				this.memory.args = i.limit;
 				
-				this.memory.findNewTarget = {args: i.limit, fun: function(creep) {var target = creep.target; return !eval(creep.memory.args);}};
+				this.memory.findNewTarget = {fun: function(creep) {var target = creep.target; return !eval(creep.memory.args);}};
 				//this.log(target +': ' + this.memory.findNewTarget.fun(this) + ' ' + this.memory.args)
 				if(i.limit != undefined && i.limit != null && this.memory.findNewTarget.fun(this)) continue;
 				//this.log(this.canClaim(new_target, 2))
@@ -75,7 +75,7 @@ Creep.prototype.Tail = function() {
 	}
 	//this.log(this.memory.findNewTarget.args)
 	if(this.memory.findNewTarget === undefined) this.memory.findNewTarget = {fun: function(target){return true;}};
-	else if(this.memory.args != undefined) this.memory.findNewTarget = {args: i.limit, fun: function(creep) {var target = creep.target; return !eval(creep.memory.args);}};
+	else if(this.memory.args != undefined) this.memory.findNewTarget = {fun: function(creep) {var target = creep.target; return !eval(creep.memory.args);}};
 	else this.memory.findNewTarget = {fun: function(target){return true;}};
 	//this.log(this.memory.findNewTarget.fun)
 	//this.unclaimAll();
