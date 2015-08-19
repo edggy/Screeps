@@ -22,7 +22,7 @@ Creep.prototype.Tail = function() {
 	if(this.target === null) {
 	    
 		Util.setUp(this, 'role.valid_targets');
-		for(i in this.role.valid_targets) {
+		for(var i in this.role.valid_targets) {
 		    
 		    i = this.role.valid_targets[i];
 		    //this.log(i.search);
