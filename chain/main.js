@@ -127,8 +127,8 @@ for(creep in Game.creeps) {
                     }
                 }
             }
-            var rng = Math.floor(Math.random()*possibe.length)
-            creep.target = possibe[rng];
+            //var rng = Math.floor(Math.random()*possibe.length)
+            creep.target = creep.spawn.findClosestByRange(possibe);
         }
         creep.role = 'Head';
         //var target = creep.pos.findClosestByRange(FIND_SOURCES);
